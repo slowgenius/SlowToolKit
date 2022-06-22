@@ -15,6 +15,9 @@ dependencies {
     implementation("cn.hutool:hutool-all:5.7.16")
     // https://mvnrepository.com/artifact/com.alibaba/fastjson
     implementation("com.alibaba:fastjson:1.2.78")
+
+    implementation("org.freemarker:freemarker:2.3.31")
+
 }
 
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin

@@ -1,12 +1,11 @@
-package com.mp.tools;
+package com.mp.tools.findName;
 
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
-import com.intellij.ui.JBSplitter;
-import com.mp.tools.ui.ConsoleUI;
+import com.mp.tools.findName.ui.ConsoleUI;
 
 /**
  * @author slowgenius

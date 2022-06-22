@@ -1,7 +1,7 @@
-package com.mp.tools.ui;
+package com.mp.tools.findName.ui;
 
 
-import com.mp.tools.data.NameData;
+import com.mp.tools.findName.data.NameData;
 
 import javax.swing.*;
 

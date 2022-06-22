@@ -28,7 +28,10 @@
         <toolWindow id="命名查询"
                     canCloseContents="true"
                     anchor="bottom"
-                    factoryClass="com.mp.tools.FindNameFactory"
+                    factoryClass="com.mp.tools.findName.FindNameFactory"
                     icon="/icons/refresh.svg"/>
+
+        <applicationService serviceImplementation="com.mp.tools.generator.infrastructure.DataSetting"/>
+        <projectTemplatesFactory implementation="com.mp.tools.generator.factory.TemplateFactory"/>
     </extensions>
 </idea-plugin>
