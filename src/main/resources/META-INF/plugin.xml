@@ -1,22 +1,19 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
-    <id>com.mp.tools</id>
+    <id>slowgenius-tools</id>
 
     <!-- Public plugin name should be written in Title Case.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
-    <name>Tools</name>
+    <name>My-Tools</name>
 
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
-    <vendor email="support@yourcompany.com" url="https://www.yourcompany.com">YourCompany</vendor>
+    <vendor email="slowgenius@163.com" url="https://gitee.com/slowgenius_admin">笨天才</vendor>
 
     <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
-    <description><![CDATA[
-    Enter short description for your plugin here.<br>
-    <em>most HTML tags may be used</em>
-  ]]></description>
+    <description>a plugin to help you to code, many functions is being developing</description>
 
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
@@ -30,7 +27,6 @@
                     anchor="bottom"
                     factoryClass="com.mp.tools.findName.FindNameFactory"
                     icon="/icons/refresh.svg"/>
-
         <applicationService serviceImplementation="com.mp.tools.generator.infrastructure.DataSetting"/>
         <projectTemplatesFactory implementation="com.mp.tools.generator.factory.TemplateFactory"/>
     </extensions>

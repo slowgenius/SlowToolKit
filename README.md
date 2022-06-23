@@ -8,8 +8,15 @@
 
 暂没有上传，可以自己打包本地安装
 
-1. idea-preference-plugins
-![输入图片说明](https://images.gitee.com/uploads/images/2022/0622/110102_9b642fbc_2345260.png "屏幕截图.png")
+1. 下载项目，本地build（可能会很久），因为要下idea插件相关的sdk和gradle
+
+2. idea-preference-plugins
+
+#### 功能列表
+1. 生成项目脚手架
+2. 命名查询
+3. mybatis-plus注解一键生成（开发中）
+4. 逆向工程（规划中）
 
 #### 参与贡献
 

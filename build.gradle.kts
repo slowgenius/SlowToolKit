@@ -3,8 +3,8 @@ plugins {
     id("org.jetbrains.intellij") version "1.5.2"
 }
 
-group = "com.mp"
-version = "1.0-SNAPSHOT"
+group = "com.slowgenius"
+version = "1.0"
 
 repositories {
     mavenCentral()
@@ -35,18 +35,7 @@ tasks {
         targetCompatibility = "11"
     }
 
-    patchPluginXml {
-        sinceBuild.set("212")
-        untilBuild.set("222.*")
-    }
-
-    signPlugin {
-        certificateChain.set(System.getenv("CERTIFICATE_CHAIN"))
-        privateKey.set(System.getenv("PRIVATE_KEY"))
-        password.set(System.getenv("PRIVATE_KEY_PASSWORD"))
-    }
-
     publishPlugin {
-        token.set(System.getenv("PUBLISH_TOKEN"))
+        token.set("amalformedtoken")
     }
 }
