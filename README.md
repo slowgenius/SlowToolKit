@@ -17,6 +17,8 @@
 2. 命名查询
 3. mybatis-plus注解一键生成（开发中）
 4. 逆向工程（规划中）
+5. mapper service的mybatis-plus继承关系生成（规划中）
+6. mapper service文件生成（规划中）
 
 #### 参与贡献
 
