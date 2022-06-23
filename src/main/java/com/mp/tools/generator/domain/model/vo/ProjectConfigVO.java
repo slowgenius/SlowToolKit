@@ -7,7 +7,7 @@ public class ProjectConfigVO {
     private String _version;
     private String _package;
 
-    private String basePackage = "mp.lylb.serv";
+    private String basePackage;
     private String projectName = "mp-serv-groupon";
 
 

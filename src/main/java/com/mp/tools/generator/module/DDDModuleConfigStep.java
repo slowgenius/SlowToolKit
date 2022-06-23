@@ -31,7 +31,7 @@ public class DDDModuleConfigStep extends ModuleWizardStep {
         // 获取配置信息，写入到 DataSetting
         ProjectConfigVO projectConfig = DataSetting.getInstance().getProjectConfig();
         projectConfig.setProjectName(projectConfigUI.getProjectName().getText());
-        projectConfig.setBasePackage(projectConfig.getBasePackage() + projectConfig.getProjectName().replace("mp-serv-", ""));
+        projectConfig.setBasePackage("mp.lylb.serv" + projectConfig.getProjectName().replace("mp-serv-", ""));
         return super.validate();
     }
 

@@ -74,8 +74,10 @@ public class MpProjectGeneratorImpl extends AbstractProjectGenerator {
     }
 
     public void generateWeb(Project project, String entryPath, ProjectConfigVO projectConfig) {
-        writeFile(project, "src/main/java/" + projectConfig.getBasePackage(), entryPath + "/" + projectConfig.getProjectName() + "-web", ".gitkeep", "gitkeep.ftl", projectConfig);
-        writeFile(project, "src/main/resources", entryPath + "/" + projectConfig.getProjectName() + "-web", ".gitkeep", "gitkeep.ftl", projectConfig);
+        writeFile(project, "src/main/java/" + projectConfig.getBasePackage(), entryPath + "/" + projectConfig.getProjectName() + "-web", "Application.java", "service-Application.ftl", projectConfig);
+        writeFile(project, "src/main/resources", entryPath + "/" + projectConfig.getProjectName() + "-web", "application.yml", "service-config-application-yml.ftl", projectConfig);
+        writeFile(project, "src/main/resources", entryPath + "/" + projectConfig.getProjectName() + "-web", "application-dev.yml", "service-config-application-dev-yml.ftl", projectConfig);
+        writeFile(project, "src/main/resources", entryPath + "/" + projectConfig.getProjectName() + "-web", "application-test.yml", "service-config-application-test-yml.ftl", projectConfig);
         writeFile(project, "/", entryPath + "/" + projectConfig.getProjectName() + "-web", "pom.xml", "service-web-pom.ftl", projectConfig);
     }
 

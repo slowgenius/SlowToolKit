@@ -11,11 +11,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@ComponentScan({"{basePackage}"})
+@ComponentScan({"mp.lylb"})
 @EnableScheduling
 @EnableAsync
-@MapperScan({"{projectPackage}.dal.*.mapper"})
-@EnableFeignClients(basePackages = "{projectPackage}.integration")
+@MapperScan({"${basePackage}.dal.*.mapper"})
+@EnableFeignClients(basePackages = "${basePackage}.integration")
 public class Application {
 
     public static void main(String[] args) {

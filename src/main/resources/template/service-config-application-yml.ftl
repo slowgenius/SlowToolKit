@@ -5,7 +5,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        port: ${server.port}
+        port: <#noparse>${server.port}</#noparse>
         register-enabled: true
   profiles:
     active: dev
@@ -27,7 +27,7 @@ management:
       simple:
         enabled: false
     tags:
-      application: ${spring.application.name}
+      application: <#noparse>${spring.application.name}</#noparse>
 
 # 日志格式
 logging:
