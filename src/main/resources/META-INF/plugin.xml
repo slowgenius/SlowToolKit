@@ -21,6 +21,9 @@
         2. you can generate a project scaffold(this is only for specific company member temporarily, i'm thinking to devise it in a general way)
     </description>
 
+    <change-notes>
+
+    </change-notes>
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
