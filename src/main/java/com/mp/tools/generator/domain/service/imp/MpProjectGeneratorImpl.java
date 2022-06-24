@@ -44,6 +44,7 @@ public class MpProjectGeneratorImpl extends AbstractProjectGenerator {
 
     public void generateModel(Project project, String entryPath, ProjectConfigVO projectConfig) {
         writeFile(project, "src/main/java/" + projectConfig.getBasePackage() + ".model", entryPath + "/app/core/" + projectConfig.getProjectName() + "-model", ".gitkeep", "gitkeep.ftl", projectConfig);
+        writeFile(project, "src/main/java/" + projectConfig.getBasePackage() + ".model.enums", entryPath + "/app/core/" + projectConfig.getProjectName() + "-model", "ErrorCodeEnum.java", "ErrorCodeEnum.java.ftl", projectConfig);
         writeFile(project, "src/main/resources", entryPath + "/app/core/" + projectConfig.getProjectName() + "-model", ".gitkeep", "gitkeep.ftl", projectConfig);
         writeFile(project, "/", entryPath + "/app/core/" + projectConfig.getProjectName() + "-model", "pom.xml", "service-model-pom.ftl", projectConfig);
 
