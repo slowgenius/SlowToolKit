@@ -29,11 +29,11 @@
 
     <change-notes>
         <![CDATA[
-    <p>Includes support for:
     <ul>
-      <li>prove generator UI</li>
+      <li>optimize generator UI</li>
+      <li>add translator</li>
+      <li>add mp api project generator</li>
     </ul>
-    </p>
   ]]>
     </change-notes>
     <!-- Product and plugin compatibility requirements.
