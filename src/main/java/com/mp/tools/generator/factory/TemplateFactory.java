@@ -15,7 +15,7 @@ public class TemplateFactory extends ProjectTemplatesFactory {
 
     @NotNull
     @Override
-    public String[] getGroups() {
+    public String @NotNull [] getGroups() {
         return new String[]{"中台脚手架"};
     }
 
@@ -26,9 +26,8 @@ public class TemplateFactory extends ProjectTemplatesFactory {
 
     @NotNull
     @Override
-    public ProjectTemplate[] createTemplates(@Nullable String group, WizardContext context) {
-        ProjectTemplate[] projectTemplates = {new BuilderBasedTemplate(new DDDModuleBuilder())};
-        return projectTemplates;
+    public ProjectTemplate @NotNull [] createTemplates(@Nullable String group, WizardContext context) {
+        return new ProjectTemplate[]{new BuilderBasedTemplate(new DDDModuleBuilder())};
     }
 
 }
