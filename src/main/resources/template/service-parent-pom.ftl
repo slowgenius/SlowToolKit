@@ -9,7 +9,7 @@
     </parent>
     <groupId>mp.lylb</groupId>
     <artifactId>${projectName}</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>Demo project for Spring Boot</description>
     <properties>
@@ -73,7 +73,31 @@
                 <artifactId>${projectName}-dal</artifactId>
                 <version><#noparse>${project.version}</#noparse></version>
             </dependency>
-
+            <dependency>
+                <groupId>mp.lylb</groupId>
+                <artifactId>mp-common-utils</artifactId>
+                <version>1.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>mp.lylb</groupId>
+                <artifactId>mp-deregister-starter</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>mp.lylb</groupId>
+                <artifactId>mp-log-starter</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>mp.lylb</groupId>
+                <artifactId>mp-web-config</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>mp.lylb</groupId>
+                <artifactId>mp-token-parse-starter</artifactId>
+                <version>1.1-SNAPSHOT</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

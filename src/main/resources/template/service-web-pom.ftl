@@ -97,12 +97,6 @@
             <groupId>mp.lylb</groupId>
             <artifactId>mp-token-parse-starter</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>mp.lylb</groupId>
-            <artifactId>mp-druid-support</artifactId>
-        </dependency>
-
     </dependencies>
 
 
