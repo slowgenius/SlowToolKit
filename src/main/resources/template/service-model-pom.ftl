@@ -22,6 +22,10 @@
             <groupId>mp.lylb</groupId>
             <artifactId>${projectName}-dal</artifactId>
         </dependency>
+        <dependency>
+            <groupId>mp.lylb</groupId>
+            <artifactId>mp-common-utils</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
