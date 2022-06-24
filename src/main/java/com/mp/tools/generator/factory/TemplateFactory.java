@@ -5,7 +5,8 @@ import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.platform.ProjectTemplate;
 import com.intellij.platform.ProjectTemplatesFactory;
 import com.mp.tools.generator.infrastructure.ICONS;
-import com.mp.tools.generator.module.DDDModuleBuilder;
+import com.mp.tools.generator.module.ApiModuleBuilder;
+import com.mp.tools.generator.module.ServerModuleBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,7 +28,7 @@ public class TemplateFactory extends ProjectTemplatesFactory {
     @NotNull
     @Override
     public ProjectTemplate @NotNull [] createTemplates(@Nullable String group, WizardContext context) {
-        return new ProjectTemplate[]{new BuilderBasedTemplate(new DDDModuleBuilder())};
+        return new ProjectTemplate[]{new BuilderBasedTemplate(new ApiModuleBuilder()), new BuilderBasedTemplate(new ServerModuleBuilder())};
     }
 
 }

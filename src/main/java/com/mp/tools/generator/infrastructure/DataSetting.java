@@ -1,8 +1,8 @@
 package com.mp.tools.generator.infrastructure;
 
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.mp.tools.generator.domain.model.vo.ProjectConfigVO;
@@ -15,7 +15,7 @@ public class DataSetting implements PersistentStateComponent<DataState> {
     private DataState state = new DataState();
 
     public static DataSetting getInstance() {
-        return ServiceManager.getService(DataSetting.class);
+        return ApplicationManager.getApplication().getService(DataSetting.class);
     }
 
     @Nullable

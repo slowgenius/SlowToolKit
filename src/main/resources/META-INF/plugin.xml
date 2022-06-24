@@ -27,7 +27,15 @@
   ]]>
     </description>
 
-    <change-notes>improved generator ability</change-notes>
+    <change-notes>
+        <![CDATA[
+    <p>Includes support for:
+    <ul>
+      <li>prove generator UI</li>
+    </ul>
+    </p>
+  ]]>
+    </change-notes>
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>

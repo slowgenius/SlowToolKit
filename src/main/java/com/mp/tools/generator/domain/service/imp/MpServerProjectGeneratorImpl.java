@@ -10,7 +10,7 @@ import com.mp.tools.generator.domain.service.AbstractProjectGenerator;
  * @since 2022/6/22 21:08:44
  */
 
-public class MpProjectGeneratorImpl extends AbstractProjectGenerator {
+public class MpServerProjectGeneratorImpl extends AbstractProjectGenerator {
 
     @Override
     public void doGenerator(Project project, String entryPath, ProjectConfigVO projectConfig) {
@@ -76,9 +76,9 @@ public class MpProjectGeneratorImpl extends AbstractProjectGenerator {
 
     public void generateWeb(Project project, String entryPath, ProjectConfigVO projectConfig) {
         writeFile(project, "src/main/java/" + projectConfig.getBasePackage() + ".web", entryPath + "/" + projectConfig.getProjectName() + "-web", "Application.java", "service-Application.ftl", projectConfig);
-        writeFile(project, "src/main/resources", entryPath + "/" + projectConfig.getProjectName() + "-web", "application.yml", "service-config-application-yml.ftl", projectConfig);
-        writeFile(project, "src/main/resources", entryPath + "/" + projectConfig.getProjectName() + "-web", "application-dev.yml", "service-config-application-dev-yml.ftl", projectConfig);
-        writeFile(project, "src/main/resources", entryPath + "/" + projectConfig.getProjectName() + "-web", "application-test.yml", "service-config-application-test-yml.ftl", projectConfig);
+        writeFile(project, "src/main/resources", entryPath + "/" + projectConfig.getProjectName() + "-web", "application.yml", "service-config-application.yml.ftl", projectConfig);
+        writeFile(project, "src/main/resources", entryPath + "/" + projectConfig.getProjectName() + "-web", "application-dev.yml", "service-config-application-dev.yml.ftl", projectConfig);
+        writeFile(project, "src/main/resources", entryPath + "/" + projectConfig.getProjectName() + "-web", "application-test.yml", "service-config-application-test.yml.ftl", projectConfig);
         writeFile(project, "/", entryPath + "/" + projectConfig.getProjectName() + "-web", "pom.xml", "service-web-pom.ftl", projectConfig);
     }
 

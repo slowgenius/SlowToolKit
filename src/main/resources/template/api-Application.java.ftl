@@ -1,4 +1,5 @@
-package {projectPackage}.web;
+<#-- @ftlvariable name="basePackage" type="java.lang.String" -->
+package ${basePackage}.web;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,15 +10,15 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-@ComponentScan({"{basePackage}"})
+@ComponentScan({"mp.lylb"})
 @EnableDiscoveryClient
 @EnableScheduling
 @EnableAsync
-@EnableFeignClients(basePackages = "{projectPackage}.integration")
+@EnableFeignClients(basePackages = "${basePackage}.integration")
 public class Application {
 
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
+public static void main(String[] args) {
+SpringApplication.run(Application.class, args);
+}
 
 }

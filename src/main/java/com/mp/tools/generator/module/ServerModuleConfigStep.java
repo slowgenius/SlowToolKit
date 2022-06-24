@@ -4,21 +4,21 @@ import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.openapi.options.ConfigurationException;
 import com.mp.tools.generator.domain.model.vo.ProjectConfigVO;
 import com.mp.tools.generator.infrastructure.DataSetting;
-import com.mp.tools.generator.ui.ProjectConfigUI;
+import com.mp.tools.generator.ui.ProjectServerConfigUI;
 
 import javax.swing.*;
 
-public class DDDModuleConfigStep extends ModuleWizardStep {
+public class ServerModuleConfigStep extends ModuleWizardStep {
 
-    private ProjectConfigUI projectConfigUI;
+    private final ProjectServerConfigUI projectServerConfigUI;
 
-    public DDDModuleConfigStep(ProjectConfigUI projectConfigUI) {
-        this.projectConfigUI = projectConfigUI;
+    public ServerModuleConfigStep(ProjectServerConfigUI projectServerConfigUI) {
+        this.projectServerConfigUI = projectServerConfigUI;
     }
 
     @Override
     public JComponent getComponent() {
-        return projectConfigUI.getComponent();
+        return projectServerConfigUI.getComponent();
     }
 
     @Override
@@ -30,8 +30,8 @@ public class DDDModuleConfigStep extends ModuleWizardStep {
     public boolean validate() throws ConfigurationException {
         // 获取配置信息，写入到 DataSetting
         ProjectConfigVO projectConfig = DataSetting.getInstance().getProjectConfig();
-        projectConfig.setProjectName(projectConfigUI.getProjectName().getText());
-        projectConfig.setBasePackage("mp.lylb.serv." + projectConfig.getProjectName().replace("mp-serv-", ""));
+        projectConfig.setProjectName("mp-serv-" + projectServerConfigUI.getProjectName().getText());
+        projectConfig.setBasePackage("mp.lylb.serv." + projectServerConfigUI.getProjectName().getText());
         return super.validate();
     }
 

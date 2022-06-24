@@ -12,6 +12,8 @@ public class ICONS {
 
     public static final Icon DDD = load("/icons/DDD.png");
 
-    public static final Icon SPRING_BOOT = load("/icons/spring-boot.png");
+    public static final Icon SERVER_ICON = load("/icons/server.png");
+
+    public static final Icon API_ICON = load("/icons/api.png");
 
 }

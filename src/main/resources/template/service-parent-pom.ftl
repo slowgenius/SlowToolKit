@@ -5,7 +5,7 @@
     <parent>
         <groupId>mp.lylb</groupId>
         <artifactId>lylb-dependencys</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.2-SNAPSHOT</version>
     </parent>
     <groupId>mp.lylb</groupId>
     <artifactId>${projectName}</artifactId>
