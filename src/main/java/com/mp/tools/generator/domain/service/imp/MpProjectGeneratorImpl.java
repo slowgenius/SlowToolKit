@@ -31,50 +31,50 @@ public class MpProjectGeneratorImpl extends AbstractProjectGenerator {
 
 
     public void generateDal(Project project, String entryPath, ProjectConfigVO projectConfig) {
-        writeFile(project, "src/main/java/" + projectConfig.getBasePackage(), entryPath + "/app/common/" + projectConfig.getProjectName() + "-dal", ".gitkeep", "gitkeep.ftl", projectConfig);
+        writeFile(project, "src/main/java/" + projectConfig.getBasePackage() + ".dal", entryPath + "/app/common/" + projectConfig.getProjectName() + "-dal", ".gitkeep", "gitkeep.ftl", projectConfig);
         writeFile(project, "src/main/resources", entryPath + "/app/common/" + projectConfig.getProjectName() + "-dal", ".gitkeep", "gitkeep.ftl", projectConfig);
         writeFile(project, "/", entryPath + "/app/common/" + projectConfig.getProjectName() + "-dal", "pom.xml", "service-dal-pom.ftl", projectConfig);
     }
 
     public void generateUtil(Project project, String entryPath, ProjectConfigVO projectConfig) {
-        writeFile(project, "src/main/java/" + projectConfig.getBasePackage(), entryPath + "/app/common/" + projectConfig.getProjectName() + "-util", ".gitkeep", "gitkeep.ftl", projectConfig);
+        writeFile(project, "src/main/java/" + projectConfig.getBasePackage() + ".util", entryPath + "/app/common/" + projectConfig.getProjectName() + "-util", ".gitkeep", "gitkeep.ftl", projectConfig);
         writeFile(project, "src/main/resources", entryPath + "/app/common/" + projectConfig.getProjectName() + "-util", ".gitkeep", "gitkeep.ftl", projectConfig);
         writeFile(project, "/", entryPath + "/app/common/" + projectConfig.getProjectName() + "-util", "pom.xml", "service-util-pom.ftl", projectConfig);
     }
 
     public void generateModel(Project project, String entryPath, ProjectConfigVO projectConfig) {
-        writeFile(project, "src/main/java/" + projectConfig.getBasePackage(), entryPath + "/app/core/" + projectConfig.getProjectName() + "-model", ".gitkeep", "gitkeep.ftl", projectConfig);
+        writeFile(project, "src/main/java/" + projectConfig.getBasePackage() + ".model", entryPath + "/app/core/" + projectConfig.getProjectName() + "-model", ".gitkeep", "gitkeep.ftl", projectConfig);
         writeFile(project, "src/main/resources", entryPath + "/app/core/" + projectConfig.getProjectName() + "-model", ".gitkeep", "gitkeep.ftl", projectConfig);
         writeFile(project, "/", entryPath + "/app/core/" + projectConfig.getProjectName() + "-model", "pom.xml", "service-model-pom.ftl", projectConfig);
 
     }
 
     public void generateService(Project project, String entryPath, ProjectConfigVO projectConfig) {
-        writeFile(project, "src/main/java/" + projectConfig.getBasePackage(), entryPath + "/app/core/" + projectConfig.getProjectName() + "-service", ".gitkeep", "gitkeep.ftl", projectConfig);
+        writeFile(project, "src/main/java/" + projectConfig.getBasePackage()  + ".service", entryPath + "/app/core/" + projectConfig.getProjectName() + "-service", ".gitkeep", "gitkeep.ftl", projectConfig);
         writeFile(project, "src/main/resources", entryPath + "/app/core/" + projectConfig.getProjectName() + "-service", ".gitkeep", "gitkeep.ftl", projectConfig);
         writeFile(project, "/", entryPath + "/app/core/" + projectConfig.getProjectName() + "-service", "pom.xml", "service-service-pom.ftl", projectConfig);
     }
 
     public void generateBiz(Project project, String entryPath, ProjectConfigVO projectConfig) {
-        writeFile(project, "src/main/java/" + projectConfig.getBasePackage(), entryPath + "/app/" + projectConfig.getProjectName() + "-biz", ".gitkeep", "gitkeep.ftl", projectConfig);
+        writeFile(project, "src/main/java/" + projectConfig.getBasePackage() + ".biz", entryPath + "/app/" + projectConfig.getProjectName() + "-biz", ".gitkeep", "gitkeep.ftl", projectConfig);
         writeFile(project, "src/main/resources", entryPath + "/app/" + projectConfig.getProjectName() + "-biz", ".gitkeep", "gitkeep.ftl", projectConfig);
         writeFile(project, "/", entryPath + "/app/" + projectConfig.getProjectName() + "-biz", "pom.xml", "service-biz-pom.ftl", projectConfig);
     }
 
     public void generateFacade(Project project, String entryPath, ProjectConfigVO projectConfig) {
-        writeFile(project, "src/main/java/" + projectConfig.getBasePackage(), entryPath + "/app/service/" + projectConfig.getProjectName() + "-facade", ".gitkeep", "gitkeep.ftl", projectConfig);
+        writeFile(project, "src/main/java/" + projectConfig.getBasePackage() + ".facade", entryPath + "/app/service/" + projectConfig.getProjectName() + "-facade", ".gitkeep", "gitkeep.ftl", projectConfig);
         writeFile(project, "src/main/resources", entryPath + "/app/service/" + projectConfig.getProjectName() + "-facade", ".gitkeep", "gitkeep.ftl", projectConfig);
         writeFile(project, "/", entryPath + "/app/service/" + projectConfig.getProjectName() + "-facade", "pom.xml", "service-facade-pom.ftl", projectConfig);
     }
 
     public void generateIntegration(Project project, String entryPath, ProjectConfigVO projectConfig) {
-        writeFile(project, "src/main/java/" + projectConfig.getBasePackage(), entryPath + "/app/service/" + projectConfig.getProjectName() + "-integration", ".gitkeep", "gitkeep.ftl", projectConfig);
+        writeFile(project, "src/main/java/" + projectConfig.getBasePackage() + ".integration", entryPath + "/app/service/" + projectConfig.getProjectName() + "-integration", ".gitkeep", "gitkeep.ftl", projectConfig);
         writeFile(project, "src/main/resources", entryPath + "/app/service/" + projectConfig.getProjectName() + "-integration", ".gitkeep", "gitkeep.ftl", projectConfig);
         writeFile(project, "/", entryPath + "/app/service/" + projectConfig.getProjectName() + "-integration", "pom.xml", "service-integration-pom.ftl", projectConfig);
     }
 
     public void generateWeb(Project project, String entryPath, ProjectConfigVO projectConfig) {
-        writeFile(project, "src/main/java/" + projectConfig.getBasePackage(), entryPath + "/" + projectConfig.getProjectName() + "-web", "Application.java", "service-Application.ftl", projectConfig);
+        writeFile(project, "src/main/java/" + projectConfig.getBasePackage() + ".web", entryPath + "/" + projectConfig.getProjectName() + "-web", "Application.java", "service-Application.ftl", projectConfig);
         writeFile(project, "src/main/resources", entryPath + "/" + projectConfig.getProjectName() + "-web", "application.yml", "service-config-application-yml.ftl", projectConfig);
         writeFile(project, "src/main/resources", entryPath + "/" + projectConfig.getProjectName() + "-web", "application-dev.yml", "service-config-application-dev-yml.ftl", projectConfig);
         writeFile(project, "src/main/resources", entryPath + "/" + projectConfig.getProjectName() + "-web", "application-test.yml", "service-config-application-test-yml.ftl", projectConfig);

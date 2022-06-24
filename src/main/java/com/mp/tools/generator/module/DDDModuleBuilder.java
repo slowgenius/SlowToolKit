@@ -6,35 +6,26 @@ import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.SettingsStep;
 import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.module.EmptyModuleType;
-import com.intellij.openapi.module.ModifiableModuleModel;
-import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.module.ModuleTypeManager;
-import com.intellij.openapi.module.ModuleWithNameAlreadyExists;
-import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.ui.configuration.ModulesProvider;
-import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.mp.tools.generator.domain.service.IProjectGenerator;
 import com.mp.tools.generator.domain.service.imp.MpProjectGeneratorImpl;
 import com.mp.tools.generator.infrastructure.DataSetting;
 import com.mp.tools.generator.infrastructure.ICONS;
 import com.mp.tools.generator.infrastructure.MsgBundle;
 import com.mp.tools.generator.ui.ProjectConfigUI;
-import org.jdom.JDOMException;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.io.File;
-import java.io.IOException;
 import java.util.Objects;
 
 import static com.intellij.openapi.module.ModuleTypeId.JAVA_MODULE;
@@ -85,7 +76,7 @@ public class DDDModuleBuilder extends ModuleBuilder {
     }
 
     @Override
-    public void setupRootModel(@NotNull ModifiableRootModel rootModel) throws ConfigurationException {
+    public void setupRootModel(@NotNull ModifiableRootModel rootModel) {
 
         // 设置 JDK
         if (null != this.myJdk) {

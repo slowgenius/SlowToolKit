@@ -35,6 +35,11 @@ tasks {
         targetCompatibility = "11"
     }
 
+    patchPluginXml {
+        sinceBuild.set("202")
+        untilBuild.set("222.*")
+    }
+
     publishPlugin {
         token.set("amalformedtoken")
     }
