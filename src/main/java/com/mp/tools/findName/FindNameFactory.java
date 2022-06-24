@@ -22,7 +22,7 @@ public class FindNameFactory implements ToolWindowFactory {
         // 获取内容工厂的实例
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         // 获取 ToolWindow 显示的内容
-        Content content = contentFactory.createContent(new ConsoleUI().getMain(), "查询命名", false);
+        Content content = contentFactory.createContent(new ConsoleUI().getMain(), "翻译", true);
 
         // 设置 ToolWindow 显示的内容
         toolWindow.getContentManager().addContent(content);

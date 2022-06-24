@@ -1,34 +1,57 @@
 package com.mp.tools.findName.ui;
 
 
-import com.mp.tools.findName.data.NameData;
+import com.mp.tools.findName.data.LanguageData;
+import com.mp.tools.findName.data.Translator;
 
 import javax.swing.*;
+import java.util.Objects;
 
 public class ConsoleUI {
 
     private JPanel main;
-    private JTextPane text;
     private JTextPane result;
     private JButton submit;
+    private JTextArea text;
+
+    private JLabel tips;
+    private JComboBox comboBox1;
 
     public ConsoleUI() {
         submit.addActionListener(e -> {
-            NameData data = NameData.getData(getText().getText());
-            String str = "";
-            for (String allWord : data.getAllWords()) {
-                str = str + " [" + allWord + "] ";
+            String str = getText().getText();
+            String language = LanguageData.getLanguage(str);
+            if (language.equals("en") && Objects.requireNonNull(comboBox1.getSelectedItem()).toString().equals("English")) {
+                comboBox1.setSelectedIndex(1);
             }
-            result.setText(str);
+            if (language.equals("zh") && Objects.requireNonNull(comboBox1.getSelectedItem()).toString().equals("中文")) {
+                comboBox1.setSelectedIndex(0);
+            }
+            String to;
+            switch (comboBox1.getSelectedIndex()) {
+                case 0:
+                    to = "en";
+                    break;
+                case 1:
+                    to = "zh";
+                    break;
+                case 2:
+                    to = "yue";
+                    break;
+                case 3:
+                    to = "wyw";
+                    break;
+                case 4:
+                    to = "cht";
+                    break;
+                case 5:
+                    to = "jp";
+                    break;
+                default:
+                    to = "";
+            }
+            result.setText(Translator.translate(language, to, str));
         });
-    }
-
-    public JTextPane getText() {
-        return text;
-    }
-
-    public void setText(JTextPane text) {
-        this.text = text;
     }
 
     public JPanel getMain() {
@@ -37,5 +60,21 @@ public class ConsoleUI {
 
     public void setMain(JPanel main) {
         this.main = main;
+    }
+
+    public JTextArea getText() {
+        return text;
+    }
+
+    public void setText(JTextArea text) {
+        this.text = text;
+    }
+
+    public JLabel getTips() {
+        return tips;
+    }
+
+    public void setTips(JLabel tips) {
+        this.tips = tips;
     }
 }

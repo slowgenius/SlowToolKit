@@ -43,8 +43,8 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow id="命名查询"
-                    canCloseContents="true"
+        <toolWindow id="ToolKit"
+                    canCloseContents="false"
                     anchor="bottom"
                     factoryClass="com.mp.tools.findName.FindNameFactory"
                     icon="/icons/refresh.svg"/>
