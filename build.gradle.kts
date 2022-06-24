@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.slowgenius"
-version = "1.0.2"
+version = "1.0.3"
 
 repositories {
     mavenCentral()
@@ -36,7 +36,7 @@ tasks {
     }
 
     patchPluginXml {
-        sinceBuild.set("202")
+        sinceBuild.set("191")
         untilBuild.set("222.*")
     }
 
