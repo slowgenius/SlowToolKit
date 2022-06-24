@@ -1,4 +1,4 @@
-package template;
+package ${basePackage}.model.enums;
 
 import mp.lylb.common.code.ResultCode;
 
