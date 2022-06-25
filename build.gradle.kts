@@ -17,6 +17,7 @@ dependencies {
     implementation("com.alibaba:fastjson:1.2.78")
 
     implementation("org.freemarker:freemarker:2.3.31")
+    implementation("org.projectlombok:lombok:1.18.22")
 
 }
 
@@ -24,8 +25,7 @@ dependencies {
 intellij {
     version.set("2021.2")
     type.set("IC") // Target IDE Platform
-
-    plugins.set(listOf(/* Plugin Dependencies */))
+    plugins.set(listOf("com.intellij.java"))
 }
 
 tasks {
