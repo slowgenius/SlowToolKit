@@ -33,30 +33,20 @@ public class Utils {
         return ret;
     }
 
-    public static int getWordStartOffset(CharSequence editorText, int cursorOffset) {
+    public static String getWordStartOffset(CharSequence editorText, int cursorOffset) {
         if (editorText.length() == 0) {
-            return 0;
+            return "";
         }
-
-        if (cursorOffset > 0 && !Character.isJavaIdentifierPart(editorText.charAt(cursorOffset))
-                && Character.isJavaIdentifierPart(editorText.charAt(cursorOffset - 1))) {
-            cursorOffset--;
-        }
-
-        if (Character.isJavaIdentifierPart(editorText.charAt(cursorOffset))) {
-            int start = cursorOffset;
-            int end = cursorOffset;
-
+        if (!Character.isJavaIdentifierPart(editorText.charAt(cursorOffset))) {
+            int start = 0;
             // 定位开始位置
-            while (start > 0 && Character.isJavaIdentifierPart(editorText.charAt(start - 1))) {
-                start--;
+            while (!Character.isJavaIdentifierPart(editorText.charAt(cursorOffset))) {
+                start++;
+                cursorOffset++;
             }
-            return start;
-
+            return " ".repeat(start);
         }
-
-        return 0;
-
+        return "";
     }
 
 

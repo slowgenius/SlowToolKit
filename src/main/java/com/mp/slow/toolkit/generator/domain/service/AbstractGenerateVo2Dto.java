@@ -2,93 +2,18 @@ package com.mp.slow.toolkit.generator.domain.service;
 
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiMethod;
 import com.mp.slow.toolkit.generator.application.IContentGenerator;
-import com.mp.slow.toolkit.generator.domain.model.GenerateContext;
-import com.mp.slow.toolkit.generator.domain.model.GetObjConfigDO;
-import com.mp.slow.toolkit.generator.domain.model.SetObjConfigDO;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.regex.Pattern;
 
 public abstract class AbstractGenerateVo2Dto implements IContentGenerator {
 
-    protected final String setRegex = "set(\\w+)";
-    protected final String getRegex = "get(\\w+)";
-
     @Override
-    public void doGenerate(Project project, DataContext dataContext, PsiFile psiFile) {
-        // 1. 获取上下文
-        GenerateContext generateContext = this.getGenerateContext(project, dataContext, psiFile);
-
-        // 2. 获取对象的 set 方法集合
-        SetObjConfigDO setObjConfigDO = this.getSetObjConfigDO(generateContext);
-
-        // 3. 获取对的的 get 方法集合 【从剪切板获取】
-        GetObjConfigDO getObjConfigDO = this.getObjConfigDOByClipboardText(generateContext);
-
+    public void doGenerate(Project project, DataContext dataContext) {
         // 4. 织入代码 set->get
-        this.weavingSetGetCode(generateContext, setObjConfigDO, getObjConfigDO);
+        this.weavingSetGetCode(project, dataContext);
     }
 
-    protected abstract GenerateContext getGenerateContext(Project project, DataContext dataContext, PsiFile psiFile);
+    protected void weavingSetGetCode(Project project, DataContext dataContext) {
 
-    protected abstract SetObjConfigDO getSetObjConfigDO(GenerateContext generateContext);
-
-    protected abstract GetObjConfigDO getObjConfigDOByClipboardText(GenerateContext generateContext);
-
-    protected abstract void weavingSetGetCode(GenerateContext generateContext, SetObjConfigDO setObjConfigDO, GetObjConfigDO getObjConfigDO);
-
-    protected List<PsiClass> getPsiClassLinkList(PsiClass psiClass) {
-        List<PsiClass> psiClassList = new ArrayList<>();
-        PsiClass currentClass = psiClass;
-        while (null != currentClass && !"Object".equals(currentClass.getName())) {
-            psiClassList.add(currentClass);
-            currentClass = currentClass.getSuperClass();
-        }
-        Collections.reverse(psiClassList);
-        return psiClassList;
-    }
-
-    protected List<String> getMethods(PsiClass psiClass, String regex, String typeStr) {
-        PsiMethod[] methods = psiClass.getMethods();
-        List<String> methodList = new ArrayList<>();
-
-        // 判断使用了 lombok，需要补全生成 get、set
-        if (isUsedLombok(psiClass)) {
-            PsiField[] fields = psiClass.getFields();
-            for (PsiField psiField : fields) {
-                String name = psiField.getName();
-                methodList.add(typeStr + name.substring(0, 1).toUpperCase() + name.substring(1));
-            }
-
-            for (PsiMethod method : methods) {
-                String methodName = method.getName();
-                if (Pattern.matches(regex, methodName) && !methodList.contains(methodName)) {
-                    methodList.add(methodName);
-                }
-            }
-
-            return methodList;
-        }
-
-        for (PsiMethod method : methods) {
-            String methodName = method.getName();
-            if (Pattern.matches(regex, methodName)) {
-                methodList.add(methodName);
-            }
-        }
-
-        return methodList;
-    }
-
-    private boolean isUsedLombok(PsiClass psiClass) {
-        return null != psiClass.getAnnotation("lombok.Data");
     }
 
 }

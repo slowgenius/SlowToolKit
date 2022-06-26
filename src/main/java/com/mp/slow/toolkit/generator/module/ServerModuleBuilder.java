@@ -15,7 +15,7 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.mp.slow.toolkit.generator.domain.service.imp.MpServerProjectGeneratorImpl;
+import com.mp.slow.toolkit.generator.domain.service.imp.project.MpServerProjectGeneratorImpl;
 import com.mp.slow.toolkit.generator.infrastructure.DataSetting;
 import com.mp.slow.toolkit.generator.infrastructure.ICONS;
 import com.mp.slow.toolkit.generator.infrastructure.MsgBundle;

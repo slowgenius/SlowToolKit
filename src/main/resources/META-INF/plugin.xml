@@ -42,6 +42,8 @@
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.java</depends>
 
+    <idea-version since-build="191"/>
+
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
@@ -53,4 +55,12 @@
         <applicationService serviceImplementation="com.mp.slow.toolkit.generator.infrastructure.DataSetting"/>
         <projectTemplatesFactory implementation="com.mp.slow.toolkit.generator.factory.TemplateFactory"/>
     </extensions>
+
+    <actions>
+        <action id="Vo2DtoGenerateAction" class="com.mp.slow.toolkit.generator.action.Vo2DtoGenerateAction"
+                text="Gen @TableField" description="Vo2Dto generate util" icon="/icons/logo.svg">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift K"/>
+        </action>
+    </actions>
 </idea-plugin>

@@ -1,4 +1,4 @@
-package com.mp.slow.toolkit.generator.domain.service.imp;
+package com.mp.slow.toolkit.generator.domain.service.imp.project;
 
 import com.intellij.openapi.project.Project;
 import com.mp.slow.toolkit.generator.domain.model.ProjectConfigVO;

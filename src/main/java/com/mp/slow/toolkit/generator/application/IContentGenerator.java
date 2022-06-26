@@ -2,7 +2,6 @@ package com.mp.slow.toolkit.generator.application;
 
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiFile;
 
 /**
  * @author slowgenius
@@ -11,6 +10,6 @@ import com.intellij.psi.PsiFile;
  */
 public interface IContentGenerator extends Generator {
 
-    void doGenerate(Project project, DataContext dataContext, PsiFile psiFile);
+    void doGenerate(Project project, DataContext dataContext);
 
 }
