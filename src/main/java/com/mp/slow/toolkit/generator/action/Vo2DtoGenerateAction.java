@@ -15,11 +15,14 @@ import com.intellij.psi.PsiImportStatement;
 import com.mp.slow.toolkit.utils.StrUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class Vo2DtoGenerateAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        PsiElement data = event.getDataContext().getData(CommonDataKeys.PSI_ELEMENT);
+        PsiElement data = Objects.requireNonNull(event.getData(CommonDataKeys.PSI_FILE)).findElementAt(Objects.requireNonNull(event.getData(CommonDataKeys.EDITOR)).getCaretModel().getOffset());
+        //PsiElement data = event.getDataContext().getData(CommonDataKeys.PSI_ELEMENT);
         PsiClass psiClass;
         int count = 0;
         while (!(data instanceof PsiClass)) {
