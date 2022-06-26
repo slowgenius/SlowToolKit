@@ -8,6 +8,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiImportStatement;
@@ -18,12 +19,22 @@ public class Vo2DtoGenerateAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        PsiClass psiClass = (PsiClass) event.getDataContext().getData(CommonDataKeys.PSI_ELEMENT);
+        PsiElement data = event.getDataContext().getData(CommonDataKeys.PSI_ELEMENT);
+        PsiClass psiClass;
+        int count = 0;
+        while (!(data instanceof PsiClass)) {
+            assert data != null;
+            data = data.getParent();
+            count++;
+            if (count > 10) {
+                return;
+            }
+        }
+        psiClass = (PsiClass) data;
         Project project = event.getProject();
         assert project != null;
         PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
         PsiClass tableField1 = elementFactory.createAnnotationType("TableField");
-        assert psiClass != null;
         WriteCommandAction.runWriteCommandAction(project, () -> {
             for (PsiField field : psiClass.getFields()) {
                 PsiAnnotation anno;
@@ -32,11 +43,10 @@ public class Vo2DtoGenerateAction extends AnAction {
                 } else {
                     anno = elementFactory.createAnnotationFromText("@TableField(\"" + StrUtils.camelToUnderline(field.getName()) + "\")", tableField1);
                 }
-                field.addBefore(anno, field);
+                psiClass.addBefore(anno, field);
             }
             PsiImportStatement importStatementOnDemand = elementFactory.createImportStatementOnDemand("com.baomidou.mybatisplus.annotation");
-            psiClass.addBefore(importStatementOnDemand, psiClass);
-
+            psiClass.getParent().addBefore(importStatementOnDemand, psiClass);
         });
     }
 
