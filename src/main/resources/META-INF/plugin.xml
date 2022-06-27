@@ -57,7 +57,7 @@
     </extensions>
 
     <actions>
-        <action id="Vo2DtoGenerateAction" class="com.mp.slow.toolkit.generator.action.Vo2DtoGenerateAction"
+        <action id="Vo2DtoGenerateAction" class="com.mp.slow.toolkit.generator.action.MybatisPlusGenerateAction"
                 text="Gen @TableField" description="Vo2Dto generate util" icon="/icons/logo.svg">
             <add-to-group group-id="GenerateGroup" anchor="last"/>
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift K"/>
