@@ -19,21 +19,20 @@
         Features are under development
     <p>Includes support for:
     <ul>
-      <li>Chinese developer can find some words when you don't know how to name a method、class or ...</li>
-      <li>you can generate a project scaffold(this is only for specific company member temporarily, I'm thinking to
-        devise it in a general way</li>
+      <li>a simple translator</li>
+      <li>a kind of DDD project scaffold generator(this is only for specific company member temporarily)</li>
+      <li>One click generates @TableId/@TableField</li>
     </ul>
+    </p>
+    <p>
+        If you have some ideas, please contact me via slowgenius@163.com
     </p>
   ]]>
     </description>
 
     <change-notes>
         <![CDATA[
-    <ul>
-      <li>optimize generator UI</li>
-      <li>add translator</li>
-      <li>add mp api project generator</li>
-    </ul>
+        Includes support for One click generates @TableId/@TableField
   ]]>
     </change-notes>
     <!-- Product and plugin compatibility requirements.

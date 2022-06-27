@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.slowgenius"
-version = "1.0.4"
+version = "2.0.0"
 
 repositories {
     mavenCentral()
@@ -15,7 +15,6 @@ dependencies {
     implementation("cn.hutool:hutool-all:5.7.16")
     // https://mvnrepository.com/artifact/com.alibaba/fastjson
     implementation("com.alibaba:fastjson:1.2.78")
-
     implementation("org.freemarker:freemarker:2.3.31")
     implementation("org.projectlombok:lombok:1.18.22")
 
