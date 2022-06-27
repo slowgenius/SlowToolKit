@@ -12,7 +12,6 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiImportStatement;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.mp.slow.toolkit.utils.StrUtils;
@@ -20,6 +19,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+/**
+ * 遇到的问题
+ * <p>
+ * 1. 导包的问题
+ * 通过document的insertString方法直接输入文本，然后用JavaCodeStyleManager.optimizeImports()方法格式化
+ * 要注意Document的事务问题，需要先开启事务才能编辑
+ * <p>
+ * 2. 给字段添加注解
+ * 通过元素节点的方式总是缺少空格啥的，不知道为啥不成功，用getModifierList的addAnnotation方法可以直接添加，倒是省事。。
+ */
 public class MybatisPlusGenerateAction extends AnAction {
 
     @Override
@@ -42,8 +51,6 @@ public class MybatisPlusGenerateAction extends AnAction {
                 }
                 Objects.requireNonNull(field.getModifierList()).addAnnotation(anno);
             }
-            PsiImportStatement importStatementOnDemand = elementFactory.createImportStatementOnDemand("com.baomidou.mybatisplus.annotation");
-            psiClass.getParent().addBefore(importStatementOnDemand, psiClass);
             Document document = Objects.requireNonNull(event.getData(CommonDataKeys.EDITOR)).getDocument();
             PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(document);
             document.insertString(psiClass.getParent().getChildren()[1].getTextOffset(), "import com.baomidou.mybatisplus.annotation.TableId;\nimport com.baomidou.mybatisplus.annotation.TableField;");
