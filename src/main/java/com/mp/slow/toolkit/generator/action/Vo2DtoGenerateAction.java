@@ -34,28 +34,18 @@ public class Vo2DtoGenerateAction extends AnAction {
         PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
         WriteCommandAction.runWriteCommandAction(project, () -> {
             for (PsiField field : psiClass.getFields()) {
-                PsiAnnotation anno;
+                String anno;
                 if (field.getName().equals("id")) {
-                    anno = elementFactory.createAnnotationFromText("@TableId(\"id\")\n", psiClass);
+                    anno = "TableId(\"id\")";
                 } else {
-                    anno = elementFactory.createAnnotationFromText("@TableField(\"" + StrUtils.camelToUnderline(field.getName()) + "\")\n", psiClass);
+                    anno = "TableField(\"" + StrUtils.camelToUnderline(field.getName()) + "\")";
                 }
-                int index = -1;
-                PsiElement[] children = field.getChildren();
-                for (int i = 0; i < children.length; i++) {
-                    if (children[i] instanceof PsiDocComment) {
-                        index = i;
-                        break;
-                    }
-                }
-                if (index == -1) {
-                    field.addBefore(anno, field.getFirstChild());
-                } else {
-                    field.addAfter(anno, field.getChildren()[index + 1]);
-                }
+                Objects.requireNonNull(field.getModifierList()).addAnnotation(anno);
             }
             PsiImportStatement importStatementOnDemand = elementFactory.createImportStatementOnDemand("com.baomidou.mybatisplus.annotation");
             psiClass.getParent().addBefore(importStatementOnDemand, psiClass);
+
+            CodeStyleManager.getInstance(project).reformat(psiClass);
         });
 
     }
