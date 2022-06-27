@@ -44,6 +44,7 @@ public class Vo2DtoGenerateAction extends AnAction {
             }
             PsiImportStatement importStatementOnDemand = elementFactory.createImportStatementOnDemand("com.baomidou.mybatisplus.annotation");
             psiClass.getParent().addBefore(importStatementOnDemand, psiClass);
+            //elementFactory.createClass("com.baomidou.mybatisplus.annotation");
 
             CodeStyleManager.getInstance(project).reformat(psiClass);
         });
