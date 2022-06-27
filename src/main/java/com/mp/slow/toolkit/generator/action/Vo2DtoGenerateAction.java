@@ -28,7 +28,9 @@ public class Vo2DtoGenerateAction extends AnAction {
     public void actionPerformed(@NotNull AnActionEvent event) {
         PsiElement data = Objects.requireNonNull(event.getData(CommonDataKeys.PSI_FILE)).findElementAt(Objects.requireNonNull(event.getData(CommonDataKeys.EDITOR)).getCaretModel().getOffset());
         PsiClass psiClass = getPsiClass(data);
-        assert psiClass != null;
+        if (psiClass == null) {
+            return;
+        }
         Project project = event.getProject();
         assert project != null;
         PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
@@ -42,6 +44,7 @@ public class Vo2DtoGenerateAction extends AnAction {
                 }
                 Objects.requireNonNull(field.getModifierList()).addAnnotation(anno);
             }
+
             PsiImportStatement importStatementOnDemand = elementFactory.createImportStatementOnDemand("com.baomidou.mybatisplus.annotation");
             psiClass.getParent().addBefore(importStatementOnDemand, psiClass);
             //elementFactory.createClass("com.baomidou.mybatisplus.annotation");
