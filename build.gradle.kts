@@ -25,6 +25,7 @@ intellij {
     localPath.set("/Applications/IntelliJ IDEA.app")
     type.set("IU") // Target IDE Platform
     plugins.set(listOf("com.intellij.java"))
+
 }
 
 tasks {
@@ -32,6 +33,11 @@ tasks {
     withType<JavaCompile> {
         sourceCompatibility = "11"
         targetCompatibility = "11"
+    }
+
+    patchPluginXml {
+        sinceBuild.set("193")
+        untilBuild.set("222.*")
     }
 
     publishPlugin {

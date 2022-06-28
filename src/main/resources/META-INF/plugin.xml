@@ -33,7 +33,6 @@
 
     <change-notes>
         <![CDATA[
-
     <ul>
       <li>Optimizing the visible of generating plugin when the caret is outside the class</li>
     </ul>
@@ -46,7 +45,7 @@
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.java</depends>
 
-    <idea-version since-build="193.5"/>
+    <idea-version since-build="191"/>
 
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
