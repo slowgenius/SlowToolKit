@@ -18,7 +18,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.mp.slow.toolkit.generator.domain.service.imp.project.MpServerProjectGeneratorImpl;
 import com.mp.slow.toolkit.generator.infrastructure.DataSetting;
 import com.mp.slow.toolkit.generator.infrastructure.ICONS;
-import com.mp.slow.toolkit.generator.infrastructure.MsgBundle;
 import com.mp.slow.toolkit.generator.ui.ProjectServerConfigUI;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -49,12 +48,12 @@ public class ServerModuleBuilder extends ModuleBuilder {
     @Override
     public @Nls(capitalization = Nls.Capitalization.Title)
     String getPresentableName() {
-        return MsgBundle.message("template.server.name");
+        return "Server项目";
     }
 
     @Override
     public String getDescription() {
-        return MsgBundle.message("template.server.description");
+        return "Server项目脚手架";
     }
 
     /**

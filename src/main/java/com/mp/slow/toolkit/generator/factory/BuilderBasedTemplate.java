@@ -41,11 +41,11 @@ public class BuilderBasedTemplate implements ProjectTemplate {
         return myBuilder;
     }
 
-    @Nullable
     @Override
-    public ValidationInfo validateSettings() {
+    public @Nullable ValidationInfo validateSettings() {
         return null;
     }
+
 
     @Override
     public String toString() {

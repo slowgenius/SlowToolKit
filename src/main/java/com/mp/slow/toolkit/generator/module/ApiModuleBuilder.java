@@ -16,7 +16,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.mp.slow.toolkit.generator.domain.service.imp.project.MpApiProjectGeneratorImpl;
 import com.mp.slow.toolkit.generator.infrastructure.DataSetting;
 import com.mp.slow.toolkit.generator.infrastructure.ICONS;
-import com.mp.slow.toolkit.generator.infrastructure.MsgBundle;
 import com.mp.slow.toolkit.generator.ui.ProjectApiConfigUI;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -51,12 +50,12 @@ public class ApiModuleBuilder extends JavaModuleBuilder {
     @Override
     public @Nls(capitalization = Nls.Capitalization.Title)
     String getPresentableName() {
-        return MsgBundle.message("template.api.name");
+        return "Api项目";
     }
 
     @Override
     public String getDescription() {
-        return MsgBundle.message("template.api.description");
+        return "Api项目脚手架";
     }
 
     /**
