@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.slowgenius"
-version = "2.0.0"
+version = "2.0.1"
 
 repositories {
     mavenCentral()
@@ -32,11 +32,6 @@ tasks {
     withType<JavaCompile> {
         sourceCompatibility = "11"
         targetCompatibility = "11"
-    }
-
-    patchPluginXml {
-        sinceBuild.set("191")
-        untilBuild.set("222.*")
     }
 
     publishPlugin {

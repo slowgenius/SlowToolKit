@@ -33,7 +33,11 @@
 
     <change-notes>
         <![CDATA[
-        Includes support for One click generates @TableId/@TableField
+
+    <ul>
+      <li>Optimizing the visible of generating plugin when the caret is outside the class</li>
+    </ul>
+
   ]]>
     </change-notes>
     <!-- Product and plugin compatibility requirements.
@@ -42,7 +46,7 @@
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.java</depends>
 
-    <idea-version since-build="193"/>
+    <idea-version since-build="193.5"/>
 
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
