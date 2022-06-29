@@ -44,6 +44,7 @@
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.java</depends>
+    <depends>com.intellij.database</depends>
 
     <idea-version since-build="191"/>
 
@@ -64,6 +65,9 @@
                 text="Gen @TableField" description="Vo2Dto generate util" icon="/icons/logo.svg">
             <add-to-group group-id="GenerateGroup" anchor="last"/>
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift K"/>
+        </action>
+        <action id="testDatabase" class="com.mp.slow.toolkit.generator.action.TestAction" text="1111111111">
+            <add-to-group group-id="DatabaseViewToolbar" anchor="first"/>
         </action>
     </actions>
 </idea-plugin>

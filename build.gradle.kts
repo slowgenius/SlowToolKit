@@ -24,7 +24,7 @@ dependencies {
 intellij {
     localPath.set("/Applications/IntelliJ IDEA.app")
     type.set("IU") // Target IDE Platform
-    plugins.set(listOf("com.intellij.java"))
+    plugins.set(listOf("com.intellij.java", "com.intellij.database"))
 
 }
 
