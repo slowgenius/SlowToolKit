@@ -69,5 +69,8 @@
         <action id="testDatabase" class="com.mp.slow.toolkit.generator.action.TestAction" text="1111111111">
             <add-to-group group-id="DatabaseViewToolbar" anchor="first"/>
         </action>
+        <action id="testCreate" class="com.mp.slow.toolkit.generator.action.CreateTest" text="11111111111">
+            <add-to-group group-id="NewGroup" anchor="first"/>
+        </action>
     </actions>
 </idea-plugin>
