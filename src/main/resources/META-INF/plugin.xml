@@ -61,13 +61,13 @@
     </extensions>
 
     <actions>
-        <action id="Vo2DtoGenerateAction" class="com.mp.slow.toolkit.generator.action.MybatisPlusGenerateAction"
-                text="Gen @TableField" description="Vo2Dto generate util" icon="/icons/logo.svg">
+        <action id="mybatis-plus-gen" class="com.mp.slow.toolkit.generator.action.MybatisPlusGenerateAction"
+                text="Gen @TableField" description="generate util" icon="/icons/logo.svg">
             <add-to-group group-id="GenerateGroup" anchor="last"/>
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift K"/>
         </action>
-        <action id="testDatabase" class="com.mp.slow.toolkit.generator.action.TestAction" text="1111111111">
-            <add-to-group group-id="DatabaseViewToolbar" anchor="first"/>
+        <action id="testDatabase" class="com.mp.slow.toolkit.generator.action.TestAction" text="Test">
+            <add-to-group group-id="NewGroup1" anchor="first"/>
         </action>
     </actions>
 </idea-plugin>

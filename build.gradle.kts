@@ -8,6 +8,8 @@ version = "2.0.1"
 
 repositories {
     mavenCentral()
+    maven("https://jetbrains.bintray.com/intellij-third-party-dependencies")
+    maven("https://cache-redirector.jetbrains.com/intellij-dependencies")
 }
 
 dependencies {
