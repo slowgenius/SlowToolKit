@@ -123,7 +123,7 @@ public class CreateClasses extends AnAction {
         List<PsiPackage> result = psiPackage.parallelStream()
                 .flatMap(item -> {
                     List<PsiPackage> temp = new ArrayList<>();
-                    ApplicationManager.getApplication().runReadAction(()->{
+                    ApplicationManager.getApplication().runReadAction(() -> {
                         if (item.getClasses().length != 0 || item.getSubPackages().length == 0) {
                             temp.add(item);
                         }
@@ -159,10 +159,8 @@ public class CreateClasses extends AnAction {
             public String getErrorText(String inputString) {
                 if (inputString.length() > 0 && !PsiNameHelper.getInstance(project).isQualifiedName(inputString)) {
                     return "This is not a valid Java qualified name";
-                } else {
-                    String shortName = StringUtil.getShortName(inputString);
-                    return "Something went wrong";
                 }
+                return null;
             }
 
             public boolean checkInput(String inputString) {
