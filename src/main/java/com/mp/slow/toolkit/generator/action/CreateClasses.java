@@ -141,7 +141,7 @@ public class CreateClasses extends AnAction {
     }
 
     protected void buildDialog(@NotNull Project project, @NotNull PsiDirectory directory, CreateFileFromTemplateDialog.@NotNull Builder builder) {
-        builder.setTitle(JavaBundle.message("action.create.new.class", new Object[0])).addKind(JavaPsiBundle.message("node.class.tooltip", new Object[0]), PlatformIcons.CLASS_ICON, "Class");
+        builder.setTitle("Create Classes").addKind("Class", PlatformIcons.CLASS_ICON, "Class");
 
 //        PsiDirectory[] dirs = new PsiDirectory[]{directory};
 //        FileTemplate[] fileTemplates = FileTemplateManager.getInstance(project).getAllTemplates();
@@ -158,10 +158,10 @@ public class CreateClasses extends AnAction {
         builder.setValidator(new InputValidatorEx() {
             public String getErrorText(String inputString) {
                 if (inputString.length() > 0 && !PsiNameHelper.getInstance(project).isQualifiedName(inputString)) {
-                    return JavaErrorBundle.message("create.class.action.this.not.valid.java.qualified.name", new Object[0]);
+                    return "This is not a valid Java qualified name";
                 } else {
                     String shortName = StringUtil.getShortName(inputString);
-                    return HighlightClassUtil.isRestrictedIdentifier(shortName, LanguageLevel.HIGHEST) ? JavaErrorBundle.message("restricted.identifier", new Object[]{shortName}) : null;
+                    return "Something went wrong";
                 }
             }
 
