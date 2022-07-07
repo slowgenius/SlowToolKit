@@ -31,6 +31,7 @@ import com.intellij.psi.PsiPackage;
 import com.intellij.util.PlatformIcons;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,6 +45,13 @@ import java.util.stream.Collectors;
  */
 
 public class CreateClasses extends AnAction {
+
+    public CreateClasses() {
+    }
+
+    public CreateClasses(Icon icon) {
+        super(PlatformIcons.CLASS_ICON);
+    }
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
@@ -135,17 +143,17 @@ public class CreateClasses extends AnAction {
     protected void buildDialog(@NotNull Project project, @NotNull PsiDirectory directory, CreateFileFromTemplateDialog.@NotNull Builder builder) {
         builder.setTitle(JavaBundle.message("action.create.new.class", new Object[0])).addKind(JavaPsiBundle.message("node.class.tooltip", new Object[0]), PlatformIcons.CLASS_ICON, "Class");
 
-        PsiDirectory[] dirs = new PsiDirectory[]{directory};
-        FileTemplate[] fileTemplates = FileTemplateManager.getInstance(project).getAllTemplates();
-        int length = fileTemplates.length;
-
-        for (int i = 0; i < length; ++i) {
-            FileTemplate template = fileTemplates[i];
-            CreateFromTemplateHandler handler = FileTemplateUtil.findHandler(template);
-            if (handler instanceof JavaCreateFromTemplateHandler && handler.handlesTemplate(template) && handler.canCreate(dirs)) {
-                builder.addKind(template.getName(), JavaFileType.INSTANCE.getIcon(), template.getName());
-            }
-        }
+//        PsiDirectory[] dirs = new PsiDirectory[]{directory};
+//        FileTemplate[] fileTemplates = FileTemplateManager.getInstance(project).getAllTemplates();
+//        int length = fileTemplates.length;
+//
+//        for (int i = 0; i < length; ++i) {
+//            FileTemplate template = fileTemplates[i];
+//            CreateFromTemplateHandler handler = FileTemplateUtil.findHandler(template);
+//            if (handler instanceof JavaCreateFromTemplateHandler && handler.handlesTemplate(template) && handler.canCreate(dirs)) {
+//                builder.addKind(template.getName(), JavaFileType.INSTANCE.getIcon(), template.getName());
+//            }
+//        }
 
         builder.setValidator(new InputValidatorEx() {
             public String getErrorText(String inputString) {
@@ -165,10 +173,5 @@ public class CreateClasses extends AnAction {
                 return !StringUtil.isEmptyOrSpaces(inputString) && this.getErrorText(inputString) == null;
             }
         });
-    }
-
-
-    public void test(AnActionEvent anActionEvent) {
-
     }
 }

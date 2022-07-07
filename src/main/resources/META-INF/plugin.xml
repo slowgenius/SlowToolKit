@@ -23,6 +23,7 @@
       <li>a simple translator</li>
       <li>a kind of DDD project scaffold generator(this is only for specific company member temporarily)</li>
       <li>One click generates @TableId/@TableField</li>
+      <li>generate relevant classes when created entity</li>
     </ul>
     </p>
     <p>
@@ -34,7 +35,9 @@
     <change-notes>
         <![CDATA[
     <ul>
-      <li>Optimizing the visible of generating plugin when the caret is outside the class</li>
+      <li>2.1.0 generate relevant classes when created entity</li>
+
+      <li>2.0.1 Optimizing the visible of generating plugin when the caret is outside the class</li>
     </ul>
 
   ]]>
@@ -66,7 +69,7 @@
             <add-to-group group-id="GenerateGroup" anchor="last"/>
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift K"/>
         </action>
-        <action id="testDatabase" class="com.mp.slow.toolkit.generator.action.CreateClasses" text="Classes">
+        <action id="CreateClasses" class="com.mp.slow.toolkit.generator.action.CreateClasses" text="Create Classes">
             <add-to-group group-id="NewGroup1" anchor="first"/>
         </action>
 <!--        <action id="CreateClasses" class="com.mp.slow.toolkit.generator.action.CreateTest" text="11111111111">-->
