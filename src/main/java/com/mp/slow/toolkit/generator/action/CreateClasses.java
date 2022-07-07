@@ -17,6 +17,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.LangDataKeys;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.InputValidatorEx;
 import com.intellij.openapi.util.text.StringUtil;
@@ -30,8 +31,11 @@ import com.intellij.psi.PsiPackage;
 import com.intellij.util.PlatformIcons;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author slowgenius
@@ -39,7 +43,7 @@ import java.util.Objects;
  * @since 2022/6/29 20:50:08
  */
 
-public class TestAction extends AnAction {
+public class CreateClasses extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
@@ -54,23 +58,31 @@ public class TestAction extends AnAction {
             this.buildDialog(project, dir, builder);
             builder.show("Error", "class", new CreateFileFromTemplateDialog.FileCreator<>() {
                 public PsiElement createFile(@NotNull String name, @NotNull String templateName) {
-                    PsiPackage aPackage = JavaDirectoryService.getInstance().getPackage(dir);
-                    assert aPackage != null;
-                    PsiPackage[] subPackages = Objects.requireNonNull(aPackage.getParentPackage()).getSubPackages();
-                    PsiClass result = null;
-                    for (int i = 0; i < subPackages.length; i++) {
-                        if (i == 0) {
-                            result = JavaDirectoryService.getInstance().createClass(subPackages[i].getDirectories()[0], name, templateName, true);
-                        } else {
-                            int finalI = i;
-                            boolean present = Arrays.stream(FileTemplateManager.getInstance(project).getAllTemplates())
-                                    .anyMatch(item -> item.getName().equals(subPackages[finalI].getName()));
-                            if (present) {
-                                JavaDirectoryService.getInstance().createClass(subPackages[i].getDirectories()[0], name, templateName, true);
-                            }
-                        }
+                    PsiPackage choosePackage = JavaDirectoryService.getInstance().getPackage(dir);
+                    assert choosePackage != null;
+
+                    PsiPackage parentPackage = choosePackage.getParentPackage();
+                    if (parentPackage == null) {
+                        return JavaDirectoryService.getInstance().createClass(choosePackage.getDirectories()[0], name, templateName, true);
                     }
-                    return result;
+                    List<PsiClass> result = new ArrayList<>();
+
+                    List<PsiPackage> allSubPackage = getAllSubPackage(Arrays.stream(Objects.requireNonNull(parentPackage.getParentPackage()).getSubPackages()).collect(Collectors.toList()));
+                    allSubPackage.forEach(psiPackage -> {
+                        if (psiPackage.getQualifiedName().equals(choosePackage.getQualifiedName())) {
+                            result.add(JavaDirectoryService.getInstance().createClass(psiPackage.getDirectories()[0], name, templateName, true));
+                            return;
+                        }
+                        Arrays.stream(FileTemplateManager.getInstance(project).getAllTemplates())
+                                .forEach(item -> {
+                                    if (psiPackage.getQualifiedName().endsWith(item.getName())) {
+                                        for (PsiDirectory directory : psiPackage.getDirectories()) {
+                                            JavaDirectoryService.getInstance().createClass(directory, name, item.getName(), true);
+                                        }
+                                    }
+                                });
+                    });
+                    return result.get(0);
                 }
 
                 public boolean startInWriteAction() {
@@ -96,6 +108,28 @@ public class TestAction extends AnAction {
             }
         }
 
+    }
+
+    private List<PsiPackage> getAllSubPackage(List<PsiPackage> psiPackage) {
+
+        List<PsiPackage> result = psiPackage.parallelStream()
+                .flatMap(item -> {
+                    List<PsiPackage> temp = new ArrayList<>();
+                    ApplicationManager.getApplication().runReadAction(()->{
+                        if (item.getClasses().length != 0 || item.getSubPackages().length == 0) {
+                            temp.add(item);
+                        }
+                        temp.addAll(Arrays.stream(item.getSubPackages()).collect(Collectors.toList()));
+                    });
+                    return temp.parallelStream();
+                })
+                .distinct()
+                .collect(Collectors.toList());
+
+        if (result.size() == psiPackage.size()) {
+            return result;
+        }
+        return getAllSubPackage(result);
     }
 
     protected void buildDialog(@NotNull Project project, @NotNull PsiDirectory directory, CreateFileFromTemplateDialog.@NotNull Builder builder) {

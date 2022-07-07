@@ -5,6 +5,8 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
@@ -40,7 +42,6 @@ public class MybatisPlusGenerateAction extends AnAction {
         }
         Project project = event.getProject();
         assert project != null;
-        PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
         WriteCommandAction.runWriteCommandAction(project, () -> {
             for (PsiField field : psiClass.getFields()) {
                 String anno;
@@ -58,9 +59,7 @@ public class MybatisPlusGenerateAction extends AnAction {
 
             CodeStyleManager.getInstance(project).reformat(psiClass);
             JavaCodeStyleManager.getInstance(project).optimizeImports(Objects.requireNonNull(event.getData(CommonDataKeys.PSI_FILE)));
-
         });
-
     }
 
     @Override
@@ -87,4 +86,9 @@ public class MybatisPlusGenerateAction extends AnAction {
         return (PsiClass) data;
     }
 
+    public void test(AnActionEvent event) {
+        Project project = event.getProject();
+        PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
+        Module[] modules = ModuleManager.getInstance(project).getModules();
+    }
 }

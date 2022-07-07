@@ -24,6 +24,7 @@ dependencies {
 
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
 intellij {
+    //version.set("2021.2")
     localPath.set("/Applications/IntelliJ IDEA.app")
     type.set("IU") // Target IDE Platform
     plugins.set(listOf("com.intellij.java", "com.intellij.database"))
