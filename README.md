@@ -1,4 +1,4 @@
-# mp-tools
+# SlowToolkit
 
 #### 介绍
 一个用来在工作中提高生产力的插件
@@ -6,11 +6,7 @@
 
 #### 安装教程
 
-暂没有上传，可以自己打包本地安装
-
-1. 下载项目，本地build（可能会很久），因为要下idea插件相关的sdk和gradle
-
-2. idea-preference-plugins
+官方插件市场搜索SlowToolkit
 
 #### 功能列表
 1. 生成项目脚手架
