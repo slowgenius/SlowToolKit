@@ -57,24 +57,29 @@
         <toolWindow id="ToolKit"
                     canCloseContents="false"
                     anchor="bottom"
-                    factoryClass="com.mp.slow.toolkit.tranlator.FindNameFactory"
+                    factoryClass="com.slowgenius.toolkit.tranlator.FindNameFactory"
                     icon="/icons/refresh.svg"/>
-        <applicationService serviceImplementation="com.mp.slow.toolkit.generator.infrastructure.DataSetting"/>
-        <projectTemplatesFactory implementation="com.mp.slow.toolkit.generator.factory.TemplateFactory"/>
+        <applicationService serviceImplementation="com.slowgenius.toolkit.generator.infrastructure.DataSetting"/>
+        <projectTemplatesFactory implementation="com.slowgenius.toolkit.generator.factory.TemplateFactory"/>
+
+        <intentionAction>
+            <className>com.slowgenius.toolkit.generator.action.RequestParamIntention</className>
+            <category>SlowToolkit</category>
+        </intentionAction>
     </extensions>
 
     <actions>
-        <action id="mybatis-plus-gen" class="com.mp.slow.toolkit.generator.action.MybatisPlusGenerateAction"
+        <action id="mybatis-plus-gen" class="com.slowgenius.toolkit.generator.action.MybatisPlusGenerateAction"
                 text="Gen @TableField" description="Generate util" icon="/icons/logo.svg">
             <add-to-group group-id="GenerateGroup" anchor="last"/>
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift K"/>
         </action>
-        <action id="CreateClasses" class="com.mp.slow.toolkit.generator.action.CreateClasses" text="Create Classes">
+        <action id="CreateClasses" class="com.slowgenius.toolkit.generator.action.CreateClasses" text="Create Classes">
             <add-to-group group-id="NewGroup1" anchor="first"/>
         </action>
-<!--        <action id="CreateClasses" class="com.mp.slow.toolkit.generator.action.CreateTest" text="11111111111">-->
-<!--            <add-to-group group-id="GenerateGroup" anchor="first"/>-->
-<!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift o"/>-->
-<!--        </action>-->
+        <!--        <action id="CreateClasses" class="CreateTest" text="11111111111">-->
+        <!--            <add-to-group group-id="GenerateGroup" anchor="first"/>-->
+        <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift o"/>-->
+        <!--        </action>-->
     </actions>
 </idea-plugin>

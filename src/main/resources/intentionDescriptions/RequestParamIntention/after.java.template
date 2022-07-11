@@ -1,0 +1,3 @@
+public void test(@RequestParam(value = "name") String name, @RequestParam(value = "id") String id) {
+
+}
