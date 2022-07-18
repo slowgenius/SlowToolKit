@@ -54,7 +54,6 @@ public class RequestParamIntention extends PsiElementBaseIntentionAction impleme
                     Objects.requireNonNull(parameter.getModifierList()).addAnnotation("RequestParam(value = \"" + parameter.getName() + "\")");
                 }
             }
-
             PsiClass psiClass = PsiTreeUtil.getParentOfType(psiElement, PsiClass.class);
             Document document = editor.getDocument();
             PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(document);
@@ -62,8 +61,8 @@ public class RequestParamIntention extends PsiElementBaseIntentionAction impleme
             document.insertString(psiClass.getParent().getChildren()[1].getTextOffset(), "\nimport org.springframework.web.bind.annotation.RequestParam;");
             PsiDocumentManager.getInstance(project).commitAllDocuments();
 
-            CodeStyleManager.getInstance(project).reformat(psiClass);
             JavaCodeStyleManager.getInstance(project).optimizeImports(psiClass.getContainingFile());
+            CodeStyleManager.getInstance(project).reformat(psiClass.getParent());
         });
 
 

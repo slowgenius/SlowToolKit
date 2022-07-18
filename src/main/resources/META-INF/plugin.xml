@@ -35,9 +35,10 @@
     <change-notes>
         <![CDATA[
     <ul>
-      <li>2.1.0 generate relevant classes when created entity</li>
-
-      <li>2.0.1 Optimizing the visible of generating plugin when the caret is outside the class</li>
+      <p>2.2.0 generate @RequestParam on params</p>
+      <p>2.1.1 fix errors when creating classes</p>
+      <p>2.1.0 generate relevant classes when created entity</p>
+      <p>2.0.1 Optimizing the visible of generating plugin when the caret is outside the class</p>
     </ul>
 
   ]]>
@@ -66,6 +67,8 @@
             <className>com.slowgenius.toolkit.generator.action.RequestParamIntention</className>
             <category>SlowToolkit</category>
         </intentionAction>
+        <themeProvider id="abf70c0c-34c7-4b87-baf3-dfd4a6506e54"
+                       path="/theme/TestTheme.theme.json"/>
     </extensions>
 
     <actions>
@@ -81,5 +84,12 @@
         <!--            <add-to-group group-id="GenerateGroup" anchor="first"/>-->
         <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift o"/>-->
         <!--        </action>-->
+
+        <action id="gen-java-class" class="com.slowgenius.toolkit.generator.action.GenerateEntityAction"
+                text="Gen Java Class"
+                popup="true">
+            <!--生成代码菜单-->
+            <add-to-group group-id="DatabaseViewPopupMenu" anchor="first"/>
+        </action>
     </actions>
 </idea-plugin>
