@@ -1,4 +1,4 @@
-package com.slowgenius.toolkit.generator.action;
+package com.slowgenius.toolkit.classes.action;
 
 
 import com.intellij.ide.IdeView;

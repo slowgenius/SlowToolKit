@@ -1,4 +1,4 @@
-package com.slowgenius.toolkit.generator.action;
+package com.slowgenius.toolkit.gen_entity.action;
 
 import com.intellij.database.Dbms;
 import com.intellij.database.model.DasColumn;
@@ -12,7 +12,7 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.containers.JBIterable;
-import com.slowgenius.toolkit.generator.domain.service.FreemarkerMybatisConfiguration;
+import com.slowgenius.toolkit.gen_entity.config.FreemarkerMybatisConfiguration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.jetbrains.annotations.NotNull;

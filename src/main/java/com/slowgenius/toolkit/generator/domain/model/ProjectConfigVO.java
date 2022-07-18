@@ -2,7 +2,9 @@ package com.slowgenius.toolkit.generator.domain.model;
 
 public class ProjectConfigVO {
 
+
     private String basePackage;
+
     private String projectName;
 
 

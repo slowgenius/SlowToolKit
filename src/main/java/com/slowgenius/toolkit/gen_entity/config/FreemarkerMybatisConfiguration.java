@@ -1,4 +1,4 @@
-package com.slowgenius.toolkit.generator.domain.service;
+package com.slowgenius.toolkit.gen_entity.config;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
