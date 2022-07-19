@@ -1,4 +1,4 @@
-package com.slowgenius.toolkit.gen_entity.utils;
+package com.slowgenius.toolkit.utils;
 
 /**
  * @author slowgenius
@@ -16,7 +16,6 @@ public class TypeConverter {
         if (sqlType.contains("bigint") || sqlType.contains("int8")) {
             return "Long";
         }
-
         if (sqlType.contains("decimal")) {
             return "Double";
         }

@@ -5,6 +5,10 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.psi.PsiElement;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author slowgenius
  * @version SlowToolkit
@@ -19,8 +23,8 @@ public class MyActionUtil {
     }
 
 
-    public static DbTable getDbTable(AnActionEvent anActionEvent) {
-        return (DbTable) getPsiElement(anActionEvent);
+    public static List<DbTable> getDbTableList(AnActionEvent anActionEvent) {
+        return Arrays.stream(anActionEvent.getData(LangDataKeys.PSI_ELEMENT_ARRAY)).map(item -> (DbTable) item).collect(Collectors.toList());
     }
 
 
