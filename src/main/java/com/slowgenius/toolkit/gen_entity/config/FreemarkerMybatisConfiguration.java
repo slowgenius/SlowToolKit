@@ -13,12 +13,7 @@ import java.io.IOException;
 
 public class FreemarkerMybatisConfiguration extends Configuration {
 
-
-    public FreemarkerMybatisConfiguration() {
-        this("/template/mybatis");
-    }
-
-    private FreemarkerMybatisConfiguration(String basePackagePath) {
+    public FreemarkerMybatisConfiguration(String basePackagePath) {
         super(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
         setDefaultEncoding("UTF-8");
         setClassForTemplateLoading(getClass(), basePackagePath);

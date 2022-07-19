@@ -1,6 +1,14 @@
-public class Test {
+package ${packageInfo};
 
-<#list fieldList as value>
-   private ${value.type} ${value.name};
+/**
+* ${classInfo.comment}
+*/
+public class ${classInfo.name} {
+
+<#list fieldInfoList as value>
+ /**
+ * ${value.comment}
+ */
+ private ${value.type} ${value.name};
 </#list>
 }
