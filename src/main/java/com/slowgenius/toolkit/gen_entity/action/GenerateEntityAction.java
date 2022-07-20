@@ -59,7 +59,8 @@ public class GenerateEntityAction extends AnAction {
             templateInfo.setClassInfo(classInfo);
             templateInfo.setPackageInfo(selectedPackage.getQualifiedName());
 
-            String path = FileUtil.toSystemIndependentName(selectedPackage.getDirectories()[0].toString().replace("PsiDirectory:", ""));
+
+            String path = FileUtil.toSystemIndependentName(selectedPackage.getDirectories()[0].getVirtualFile().getPresentableUrl());
             ApplicationManager.getApplication().runWriteAction(() -> {
                 WriteFileUtil.writeByFreemarker(event.getProject(), "mybatis.ftl", templateInfo, path, templateInfo.getClassInfo().getName() + ".java");
             });
