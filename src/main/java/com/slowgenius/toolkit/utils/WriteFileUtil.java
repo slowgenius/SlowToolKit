@@ -1,8 +1,12 @@
 package com.slowgenius.toolkit.utils;
 
+import com.intellij.codeInsight.actions.ReformatCodeProcessor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.slowgenius.toolkit.gen_entity.config.FreemarkerMybatisConfiguration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -48,6 +52,10 @@ public class WriteFileUtil {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        PsiFile file = PsiManager.getInstance(project).findFile(virtualFile);
+        ReformatCodeProcessor reformatCodeProcessor = new ReformatCodeProcessor(project, file, null, false);
+        reformatCodeProcessor.run();
+        JavaCodeStyleManager.getInstance(project).optimizeImports(Objects.requireNonNull(file));
         return true;
     }
 }

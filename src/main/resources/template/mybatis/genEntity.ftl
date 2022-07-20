@@ -1,8 +1,13 @@
 package ${packageInfo};
 
+import lombok.Data;
+
+import java.util.Date;
+
 /**
 * ${classInfo.comment}
 */
+@Data
 public class ${classInfo.name} {
 
 <#list fieldInfoList as value>

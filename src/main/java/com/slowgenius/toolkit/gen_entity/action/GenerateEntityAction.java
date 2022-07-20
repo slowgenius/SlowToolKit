@@ -5,8 +5,8 @@ import com.intellij.ide.util.PackageChooserDialog;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiPackage;
 import com.slowgenius.toolkit.gen_entity.pojo.TemplateInfo;
 import com.slowgenius.toolkit.utils.DbInfoUtil;
@@ -27,17 +27,24 @@ import java.util.stream.Collectors;
  */
 public class GenerateEntityAction extends AnAction {
 
+    PackageChooserDialog packageChooserDialog = null;
+
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-
-        PackageChooserDialog packageChooserDialog = new PackageChooserDialog("Package Chooser", event.getProject());
-        //packageChooserDialog.selectPackage("com.slowgenius.entity");
+        try {
+            if (packageChooserDialog == null) {
+                packageChooserDialog = new PackageChooserDialog("Package Chooser", event.getProject());
+            }
+            //packageChooserDialog.selectPackage("com.slowgenius.entity");
+        } catch (Exception ignored) {
+        }
         packageChooserDialog.show();
 
-        ModuleManager.getInstance(event.getProject()).findModuleByName("name");
 
-        ModuleManager moduleManager = ModuleManager.getInstance(event.getProject());
+//        ModuleManager.getInstance(event.getProject()).findModuleByName("name");
+//
+//        ModuleManager moduleManager = ModuleManager.getInstance(event.getProject());
 //        Module[] modules = moduleManager.getModules();
 //
 //
@@ -62,11 +69,16 @@ public class GenerateEntityAction extends AnAction {
 
             String path = FileUtil.toSystemIndependentName(selectedPackage.getDirectories()[0].getVirtualFile().getPresentableUrl());
             ApplicationManager.getApplication().runWriteAction(() -> {
-                WriteFileUtil.writeByFreemarker(event.getProject(), "mybatis.ftl", templateInfo, path, templateInfo.getClassInfo().getName() + ".java");
+                WriteFileUtil.writeByFreemarker(event.getProject(), "genEntity.ftl", templateInfo, path, templateInfo.getClassInfo().getName() + ".java");
             });
-        });
 
+        });
 
     }
 
+    @Override
+    public void update(@NotNull AnActionEvent e) {
+        PsiElement psiElement = MyActionUtil.getPsiElement(e);
+        e.getPresentation().setEnabledAndVisible(psiElement instanceof DbTable);
+    }
 }

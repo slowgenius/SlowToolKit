@@ -87,7 +87,7 @@
         <!--        </action>-->
 
         <action id="gen-java-class" class="com.slowgenius.toolkit.gen_entity.action.GenerateEntityAction"
-                text="Gen Java Class"
+                text="Gen Java Entity"
                 popup="true">
             <!--生成代码菜单-->
             <add-to-group group-id="DatabaseViewPopupMenu" anchor="first"/>
