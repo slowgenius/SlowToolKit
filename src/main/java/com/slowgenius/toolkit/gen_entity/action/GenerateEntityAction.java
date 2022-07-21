@@ -30,18 +30,11 @@ import java.util.stream.Collectors;
  */
 public class GenerateEntityAction extends AnAction {
 
-    PackageChooserDialog packageChooserDialog = null;
-
-
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        try {
-            if (packageChooserDialog == null) {
-                packageChooserDialog = new PackageChooserDialog("Package Chooser", event.getProject());
-            }
-            //packageChooserDialog.selectPackage("com.slowgenius.entity");
-        } catch (Exception ignored) {
-        }
+        PackageChooserDialog packageChooserDialog = new PackageChooserDialog("Package Chooser", event.getProject());
+
+        //packageChooserDialog.selectPackage("com.slowgenius.entity");
         packageChooserDialog.show();
 
 
