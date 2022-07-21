@@ -1,5 +1,7 @@
 package com.slowgenius.toolkit.utils;
 
+import java.math.BigDecimal;
+
 /**
  * @author slowgenius
  * @version SlowToolkit
@@ -17,7 +19,7 @@ public class TypeConverter {
             return "Long";
         }
         if (sqlType.contains("decimal")) {
-            return "Double";
+            return "BigDecimal";
         }
         if (sqlType.contains("int")) {
             return "Integer";

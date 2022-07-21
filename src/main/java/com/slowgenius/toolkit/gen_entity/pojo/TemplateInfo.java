@@ -19,6 +19,9 @@ public class TemplateInfo {
 
     private ClassInfo classInfo;
 
+    private String since;
+
+    private String author;
 
     public List<FieldInfo> getFieldInfoList() {
         return fieldInfoList;
@@ -42,6 +45,22 @@ public class TemplateInfo {
 
     public void setClassInfo(ClassInfo classInfo) {
         this.classInfo = classInfo;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getSince() {
+        return since;
+    }
+
+    public void setSince(String since) {
+        this.since = since;
     }
 
 

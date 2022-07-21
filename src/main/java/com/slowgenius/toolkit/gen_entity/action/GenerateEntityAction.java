@@ -8,6 +8,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiPackage;
+import com.intellij.util.SystemProperties;
 import com.slowgenius.toolkit.gen_entity.pojo.TemplateInfo;
 import com.slowgenius.toolkit.utils.DbInfoUtil;
 import com.slowgenius.toolkit.utils.MyActionUtil;
@@ -16,6 +17,8 @@ import com.slowgenius.toolkit.utils.TypeConverter;
 import com.slowgenius.toolkit.utils.WriteFileUtil;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -65,7 +68,8 @@ public class GenerateEntityAction extends AnAction {
             TemplateInfo.ClassInfo classInfo = new TemplateInfo.ClassInfo(StrUtils.underlineToCamel(selectDbTable.getName()), selectDbTable.getComment());
             templateInfo.setClassInfo(classInfo);
             templateInfo.setPackageInfo(selectedPackage.getQualifiedName());
-
+            templateInfo.setSince(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm:ss")));
+            templateInfo.setAuthor(SystemProperties.getUserName());
 
             String path = FileUtil.toSystemIndependentName(selectedPackage.getDirectories()[0].getVirtualFile().getPresentableUrl());
             ApplicationManager.getApplication().runWriteAction(() -> {
