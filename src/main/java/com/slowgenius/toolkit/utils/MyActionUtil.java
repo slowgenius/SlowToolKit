@@ -27,5 +27,9 @@ public class MyActionUtil {
         return Arrays.stream(anActionEvent.getData(LangDataKeys.PSI_ELEMENT_ARRAY)).map(item -> (DbTable) item).collect(Collectors.toList());
     }
 
+    public static DbTable getDbTable(AnActionEvent anActionEvent) {
+        return (DbTable) anActionEvent.getData(LangDataKeys.PSI_ELEMENT);
+    }
+
 
 }

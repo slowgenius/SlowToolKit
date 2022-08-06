@@ -2,10 +2,14 @@ package com.slowgenius.toolkit.gen_entity.action;
 
 import com.intellij.database.psi.DbTable;
 import com.intellij.ide.util.PackageChooserDialog;
+import com.intellij.ide.util.PackageUtil;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiPackage;
 import com.intellij.util.SystemProperties;
@@ -40,8 +44,8 @@ public class GenerateEntityAction extends AnAction {
 
 //        ModuleManager.getInstance(event.getProject()).findModuleByName("name");
 //
-//        ModuleManager moduleManager = ModuleManager.getInstance(event.getProject());
-//        Module[] modules = moduleManager.getModules();
+        ModuleManager moduleManager = ModuleManager.getInstance(event.getProject());
+        Module[] modules = moduleManager.getModules();
 //
 //
 //        List<VirtualFile> virtualFileList = ModuleRootManager.getInstance(module).getSourceRoots(JavaSourceRootType.SOURCE);
@@ -49,6 +53,7 @@ public class GenerateEntityAction extends AnAction {
         PsiPackage selectedPackage = packageChooserDialog.getSelectedPackage();
         List<DbTable> selectDbTableList = Optional.ofNullable(MyActionUtil.getDbTableList(event)).orElseThrow(RuntimeException::new);
 
+        PsiDirectory possiblePackageDirectoryInModule = PackageUtil.findPossiblePackageDirectoryInModule(modules[0], "com.slowgenius");
         selectDbTableList.forEach(selectDbTable -> {
             TemplateInfo templateInfo = new TemplateInfo();
             List<TemplateInfo.FieldInfo> fieldInfoList = DbInfoUtil.getDasColumnList(selectDbTable)

@@ -16,7 +16,6 @@ import com.intellij.psi.JavaDirectoryService;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiNameHelper;
 import com.intellij.psi.PsiPackage;
 import com.intellij.util.PlatformIcons;
 import org.jetbrains.annotations.NotNull;
@@ -24,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -62,31 +62,30 @@ public class CreateClasses extends AnAction {
             this.buildDialog(project, dir, builder);
             builder.show("Error", "class", new CreateFileFromTemplateDialog.FileCreator<>() {
                 public PsiElement createFile(@NotNull String name, @NotNull String templateName) {
-                    PsiPackage choosePackage = JavaDirectoryService.getInstance().getPackage(dir);
-                    assert choosePackage != null;
-
-                    PsiPackage parentPackage = choosePackage.getParentPackage();
-                    if (parentPackage == null) {
-                        return JavaDirectoryService.getInstance().createClass(choosePackage.getDirectories()[0], name, templateName, true);
+                    List<String> collect = null;
+                    if (name.contains(",")) {
+                        collect = Arrays.stream(name.split(",")).collect(Collectors.toList());
+                    } else {
+                        collect = Collections.singletonList(name);
                     }
                     List<PsiClass> result = new ArrayList<>();
+                    collect.forEach(className -> {
+                        PsiPackage choosePackage = JavaDirectoryService.getInstance().getPackage(dir);
+                        assert choosePackage != null;
+                        result.add(JavaDirectoryService.getInstance().createClass(choosePackage.getDirectories()[0], className, templateName, true));
+//                        PsiPackage parentPackage = choosePackage.getParentPackage();
+//                        List<PsiPackage> allSubPackage = getAllSubPackage(Arrays.stream(Objects.requireNonNull(parentPackage.getParentPackage()).getSubPackages()).collect(Collectors.toList()));
+//                        allSubPackage.forEach(psiPackage -> {
+//                            if (psiPackage.getQualifiedName().equals(choosePackage.getQualifiedName())) {
+//                                result.add(JavaDirectoryService.getInstance().createClass(psiPackage.getDirectories()[0], className, templateName, true));
+//                                return;
+//                            }
 
-                    List<PsiPackage> allSubPackage = getAllSubPackage(Arrays.stream(Objects.requireNonNull(parentPackage.getParentPackage()).getSubPackages()).collect(Collectors.toList()));
-                    allSubPackage.forEach(psiPackage -> {
-                        if (psiPackage.getQualifiedName().equals(choosePackage.getQualifiedName())) {
-                            result.add(JavaDirectoryService.getInstance().createClass(psiPackage.getDirectories()[0], name, templateName, true));
-                            return;
-                        }
-                        Arrays.stream(FileTemplateManager.getInstance(project).getAllTemplates())
-                                .forEach(item -> {
-                                    if (psiPackage.getQualifiedName().endsWith(item.getName())) {
-                                        for (PsiDirectory directory : psiPackage.getDirectories()) {
-                                            JavaDirectoryService.getInstance().createClass(directory, name, item.getName(), true);
-                                        }
-                                    }
-                                });
+//                        });
                     });
+
                     return result.get(0);
+
                 }
 
                 public boolean startInWriteAction() {
@@ -129,12 +128,15 @@ public class CreateClasses extends AnAction {
     }
 
     protected void buildDialog(@NotNull Project project, @NotNull PsiDirectory directory, CreateFileFromTemplateDialog.@NotNull Builder builder) {
-        builder.setTitle("Create Classes").addKind("Class", PlatformIcons.CLASS_ICON, "Class");
+        builder.setTitle("Create Classes");
+        builder.addKind("Class", PlatformIcons.CLASS_ICON, "Class");
+        Arrays.stream(FileTemplateManager.getInstance(project).getAllTemplates())
+                .forEach(item -> {
+                    builder.addKind(item.getName(), null, item.getName());
+                });
         builder.setValidator(new InputValidatorEx() {
             public String getErrorText(String inputString) {
-                if (inputString.length() > 0 && !PsiNameHelper.getInstance(project).isQualifiedName(inputString)) {
-                    return "This is not a valid Java qualified name";
-                }
+                //非法字符提示信息
                 return null;
             }
 
