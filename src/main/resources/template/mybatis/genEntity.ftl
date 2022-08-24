@@ -6,10 +6,10 @@ import java.util.Date;
 import java.math.BigDecimal;
 
 /**
+ * ${classInfo.comment}
+ *
  * @author ${author}
  * @since ${since}
- *
- * ${classInfo.comment}
  */
 @Data
 public class ${classInfo.name} {
