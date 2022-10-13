@@ -2,7 +2,6 @@ package com.slowgenius.toolkit.tranlator.data;
 
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
-import lombok.Getter;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
@@ -17,7 +16,6 @@ import java.util.regex.Pattern;
  */
 public class NameData {
 
-    @Getter
     private String classTag;
     private String col;
     private String colBasic;

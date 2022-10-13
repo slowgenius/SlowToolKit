@@ -4,25 +4,24 @@ plugins {
 }
 
 group = "com.slowgenius"
-version = "2.4.1"
+version = "2.4.2"
 
 repositories {
     mavenCentral()
-    maven("https://jetbrains.bintray.com/intellij-third-party-dependencies")
-    maven("https://cache-redirector.jetbrains.com/intellij-dependencies")
+//    maven("https://jetbrains.bintray.com/intellij-third-party-dependencies")
+//    maven("https://cache-redirector.jetbrains.com/intellij-dependencies")
 }
 
 dependencies {
     // https://mvnrepository.com/artifact/cn.hutool/hutool-all
     implementation("cn.hutool:hutool-all:5.7.16")
     // https://mvnrepository.com/artifact/com.alibaba/fastjson
-    implementation("com.alibaba:fastjson:1.2.78")
+    implementation("com.alibaba:fastjson:2.0.14")
     implementation("org.freemarker:freemarker:2.3.31")
-    implementation("org.projectlombok:lombok:1.18.22")
-
 }
 
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
+
 intellij {
     //version.set("2021.2")
     localPath.set("/Applications/IntelliJ IDEA.app")
@@ -44,6 +43,6 @@ tasks {
     }
 
     publishPlugin {
-        token.set("amalformedtoken")
+        token.set(System.getenv("intellijPublishToken"))
     }
 }

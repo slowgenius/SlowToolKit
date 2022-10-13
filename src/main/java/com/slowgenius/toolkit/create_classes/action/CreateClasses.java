@@ -62,7 +62,10 @@ public class CreateClasses extends AnAction {
             this.buildDialog(project, dir, builder);
             builder.show("Error", "class", new CreateFileFromTemplateDialog.FileCreator<>() {
                 public PsiElement createFile(@NotNull String name, @NotNull String templateName) {
-                    List<String> collect = null;
+                    if (Character.isLowerCase(name.charAt(0))) {
+                        return createPackage(dir, name);
+                    }
+                    List<String> collect;
                     if (name.contains(",")) {
                         collect = Arrays.stream(name.split(",")).collect(Collectors.toList());
                     } else {
@@ -70,22 +73,10 @@ public class CreateClasses extends AnAction {
                     }
                     List<PsiClass> result = new ArrayList<>();
                     collect.forEach(className -> {
-                        PsiPackage choosePackage = JavaDirectoryService.getInstance().getPackage(dir);
-                        assert choosePackage != null;
-                        result.add(JavaDirectoryService.getInstance().createClass(choosePackage.getDirectories()[0], className, templateName, true));
-//                        PsiPackage parentPackage = choosePackage.getParentPackage();
-//                        List<PsiPackage> allSubPackage = getAllSubPackage(Arrays.stream(Objects.requireNonNull(parentPackage.getParentPackage()).getSubPackages()).collect(Collectors.toList()));
-//                        allSubPackage.forEach(psiPackage -> {
-//                            if (psiPackage.getQualifiedName().equals(choosePackage.getQualifiedName())) {
-//                                result.add(JavaDirectoryService.getInstance().createClass(psiPackage.getDirectories()[0], className, templateName, true));
-//                                return;
-//                            }
-
-//                        });
+                        result.add(JavaDirectoryService.getInstance().createClass(dir, className, templateName, true));
                     });
-
+                    //返回第一个元素
                     return result.get(0);
-
                 }
 
                 public boolean startInWriteAction() {
@@ -93,8 +84,7 @@ public class CreateClasses extends AnAction {
                 }
 
                 public @NotNull String getActionName(@NotNull String name, @NotNull String templateName) {
-
-                    return "Create Classes";
+                    return "Create Something";
                 }
             }, (createdElement) -> {
                 if (createdElement != null) {
@@ -148,5 +138,9 @@ public class CreateClasses extends AnAction {
                 return !StringUtil.isEmptyOrSpaces(inputString) && this.getErrorText(inputString) == null;
             }
         });
+    }
+
+    private PsiDirectory createPackage(PsiDirectory directory, String packageName) {
+        return directory.createSubdirectory(packageName);
     }
 }
