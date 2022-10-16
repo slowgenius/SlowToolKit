@@ -35,6 +35,9 @@
     <change-notes>
         <![CDATA[
     <ul>
+      <p>2.5.0</p>
+      <p> 1.provide a json formatter in the ToolKit</p>
+      <p> 2.you can press alt + enter in the keyboard  to use features in the ToolKit</p>
       <p>2.4.2 if created name is start with a lower case letter, create a package </p>
       <p>2.4.1 reformat generated entity doc </p>
       <p>2.4.0 now you can create classes by classes name spilt by ,</p>
