@@ -33,23 +33,30 @@
     </description>
 
     <change-notes>
-        <![CDATA[
-    <ul>
-      <p>2.5.0</p>
+<![CDATA[
+      <h3>2.5.0</h3>
       <p> 1.provide a json formatter in the ToolKit</p>
       <p> 2.you can press alt + enter in the keyboard  to use features in the ToolKit</p>
-      <p>2.4.2 if created name is start with a lower case letter, create a package </p>
-      <p>2.4.1 reformat generated entity doc </p>
-      <p>2.4.0 now you can create classes by classes name spilt by ,</p>
-      <p>2.3.2 fix bug</p>
-      <p>2.3.1 add @author and @since on template, Convert sql type Decimal to java BigDecimal</p>
-      <p>2.3.0 generate Java entity based on database tables</p>
-      <p>2.2.0 generate @RequestParam on params</p>
-      <p>2.1.1 fix errors when creating classes</p>
-      <p>2.1.0 generate relevant classes when created entity</p>
-      <p>2.0.1 Optimizing the visible of generating plugin when the caret is outside the class</p>
-    </ul>
-
+      <h3>2.4.2</h3>
+      <p>if created name is start with a lower case letter, create a package </p>
+      <h3>2.4.1</h3>
+      <p>reformat generated entity doc </p>
+      <h3>2.4.0</h3>
+      <p>now you can create classes by classes name spilt by ,</p>
+      <h3>2.3.2</h3>
+      <p>fix bug</p>
+      <h3>2.3.1</h3>
+      <p>add @author and @since on template, Convert sql type Decimal to java BigDecimal</p>
+      <h3>2.3.0</h3>
+      <p>generate Java entity based on database tables</p>
+      <h3>2.2.0</h3>
+      <p>generate @RequestParam on params</p>
+      <h3>2.1.1</h3>
+      <p>fix errors when creating classes</p>
+      <h3>2.1.0</h3>
+      <p>generate relevant classes when created entity</p>
+      <h3>2.0.1</h3>
+      <p>Optimizing the visible of generating plugin when the caret is outside the class</p>
   ]]>
     </change-notes>
     <!-- Product and plugin compatibility requirements.
