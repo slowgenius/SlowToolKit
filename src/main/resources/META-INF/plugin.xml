@@ -64,7 +64,7 @@
         <toolWindow id="ToolKit"
                     canCloseContents="false"
                     anchor="bottom"
-                    factoryClass="com.slowgenius.toolkit.tranlator.FindNameFactory"
+                    factoryClass="com.slowgenius.toolkit.toolkit.ToolKitFactory"
                     icon="/icons/refresh.svg"/>
         <applicationService serviceImplementation="com.slowgenius.toolkit.project_gen.infrastructure.DataSetting"/>
         <projectTemplatesFactory implementation="com.slowgenius.toolkit.project_gen.factory.TemplateFactory"/>

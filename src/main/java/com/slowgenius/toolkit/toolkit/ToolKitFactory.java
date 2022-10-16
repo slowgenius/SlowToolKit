@@ -1,11 +1,12 @@
-package com.slowgenius.toolkit.tranlator;
+package com.slowgenius.toolkit.toolkit;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
-import com.slowgenius.toolkit.tranlator.ui.ConsoleUI;
+import com.slowgenius.toolkit.toolkit.ui.JsonFormatter;
+import com.slowgenius.toolkit.toolkit.ui.TranslatorUI;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 2022/6/21 20:56:30
  */
 
-public class FindNameFactory implements ToolWindowFactory {
+public class ToolKitFactory implements ToolWindowFactory {
 
 
     @Override
@@ -22,10 +23,10 @@ public class FindNameFactory implements ToolWindowFactory {
         // 获取内容工厂的实例
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         // 获取 ToolWindow 显示的内容
-        Content content = contentFactory.createContent(new ConsoleUI().getMain(), "翻译", true);
-
+        Content translator = contentFactory.createContent(new TranslatorUI(project).getMain(), "多语互译", true);
         // 设置 ToolWindow 显示的内容
-        toolWindow.getContentManager().addContent(content);
-
+        toolWindow.getContentManager().addContent(translator);
+        Content jsonFormatter = contentFactory.createContent(new JsonFormatter(project).getMain(), "Json格式化", true);
+        toolWindow.getContentManager().addContent(jsonFormatter);
     }
 }

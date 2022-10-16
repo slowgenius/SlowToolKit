@@ -1,4 +1,4 @@
-package com.slowgenius.toolkit.tranlator.data;
+package com.slowgenius.toolkit.toolkit.data;
 
 import cn.hutool.crypto.digest.DigestUtil;
 import cn.hutool.http.HttpUtil;

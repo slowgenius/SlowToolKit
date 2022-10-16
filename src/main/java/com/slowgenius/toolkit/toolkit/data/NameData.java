@@ -1,4 +1,4 @@
-package com.slowgenius.toolkit.tranlator.data;
+package com.slowgenius.toolkit.toolkit.data;
 
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
