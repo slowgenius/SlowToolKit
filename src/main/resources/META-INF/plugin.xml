@@ -93,6 +93,11 @@
             <add-to-group group-id="GenerateGroup" anchor="last"/>
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift K"/>
         </action>
+
+        <action id="convert-java-to-json" class="com.slowgenius.toolkit.converttojson.ConvertToJsonAction"
+                text="Convert to Json" description="Convert java to json">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
         <action id="CreateClasses" class="com.slowgenius.toolkit.create_classes.action.CreateClasses"
                 text="Create Classes">
             <add-to-group group-id="NewGroup1" anchor="first"/>
