@@ -8,6 +8,9 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiTypeParameter;
+import com.intellij.psi.PsiTypeParameterListOwner;
+import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.psi.util.PsiUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -81,7 +84,17 @@ public class ConvertToJsonAction extends AnAction {
         PsiClass obj = PsiUtil.resolveClassInType(field.getType());
         assert obj != null;
         if (Objects.requireNonNull(obj.getName()).contains("List")) {
-
+            PsiClassReferenceType psiClassReferenceType = (PsiClassReferenceType) field;
+            PsiClass resolveClass = psiClassReferenceType.resolve();
+            if (resolveClass instanceof PsiTypeParameter) {
+                PsiTypeParameter typeParameter = (PsiTypeParameter) resolveClass;
+                int index = typeParameter.getIndex();
+                PsiTypeParameterListOwner owner = typeParameter.getOwner();
+                if (owner instanceof PsiClass) {
+                    PsiClass psiClass = (PsiClass) owner;
+                    String qualifiedName = psiClass.getQualifiedName();
+                }
+            }
         }
         PsiField[] allFields = Objects.requireNonNull(obj).getAllFields();
         if (allFields.length == 0) {
