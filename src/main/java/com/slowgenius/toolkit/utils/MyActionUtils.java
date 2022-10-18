@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * @since 2022/7/19 21:05:56
  */
 
-public class MyActionUtil {
+public class MyActionUtils {
 
 
     public static PsiElement getPsiElement(AnActionEvent anActionEvent) {

@@ -14,11 +14,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiPackage;
 import com.intellij.util.SystemProperties;
 import com.slowgenius.toolkit.gen_entity.pojo.TemplateInfo;
-import com.slowgenius.toolkit.utils.DbInfoUtil;
-import com.slowgenius.toolkit.utils.MyActionUtil;
+import com.slowgenius.toolkit.utils.DbInfoUtils;
+import com.slowgenius.toolkit.utils.MyActionUtils;
 import com.slowgenius.toolkit.utils.StrUtils;
-import com.slowgenius.toolkit.utils.TypeConverter;
-import com.slowgenius.toolkit.utils.WriteFileUtil;
+import com.slowgenius.toolkit.utils.TypeConverterUtils;
+import com.slowgenius.toolkit.utils.WriteFileUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
@@ -51,14 +51,14 @@ public class GenerateEntityAction extends AnAction {
 //        List<VirtualFile> virtualFileList = ModuleRootManager.getInstance(module).getSourceRoots(JavaSourceRootType.SOURCE);
 
         PsiPackage selectedPackage = packageChooserDialog.getSelectedPackage();
-        List<DbTable> selectDbTableList = Optional.ofNullable(MyActionUtil.getDbTableList(event)).orElseThrow(RuntimeException::new);
+        List<DbTable> selectDbTableList = Optional.ofNullable(MyActionUtils.getDbTableList(event)).orElseThrow(RuntimeException::new);
 
         PsiDirectory possiblePackageDirectoryInModule = PackageUtil.findPossiblePackageDirectoryInModule(modules[0], "com.slowgenius");
         selectDbTableList.forEach(selectDbTable -> {
             TemplateInfo templateInfo = new TemplateInfo();
-            List<TemplateInfo.FieldInfo> fieldInfoList = DbInfoUtil.getDasColumnList(selectDbTable)
+            List<TemplateInfo.FieldInfo> fieldInfoList = DbInfoUtils.getDasColumnList(selectDbTable)
                     .stream()
-                    .map(column -> new TemplateInfo.FieldInfo(StrUtils.underlineToCamel(column.getName()), TypeConverter.convert(column.getDataType().getSpecification()), column.getComment()))
+                    .map(column -> new TemplateInfo.FieldInfo(StrUtils.underlineToCamel(column.getName()), TypeConverterUtils.convert(column.getDataType().getSpecification()), column.getComment()))
                     .collect(Collectors.toList());
 
             templateInfo.setFieldInfoList(fieldInfoList);
@@ -71,7 +71,7 @@ public class GenerateEntityAction extends AnAction {
 
             String path = FileUtil.toSystemIndependentName(selectedPackage.getDirectories()[0].getVirtualFile().getPresentableUrl());
             ApplicationManager.getApplication().runWriteAction(() -> {
-                WriteFileUtil.writeByFreemarker(event.getProject(), "genEntity.ftl", templateInfo, path, templateInfo.getClassInfo().getName() + ".java");
+                WriteFileUtils.writeByFreemarker(event.getProject(), "genEntity.ftl", templateInfo, path, templateInfo.getClassInfo().getName() + ".java");
             });
 
         });
@@ -80,7 +80,7 @@ public class GenerateEntityAction extends AnAction {
 
     @Override
     public void update(@NotNull AnActionEvent e) {
-        PsiElement psiElement = MyActionUtil.getPsiElement(e);
+        PsiElement psiElement = MyActionUtils.getPsiElement(e);
         e.getPresentation().setEnabledAndVisible(psiElement instanceof DbTable);
     }
 }

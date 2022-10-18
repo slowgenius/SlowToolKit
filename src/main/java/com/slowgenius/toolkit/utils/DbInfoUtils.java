@@ -13,7 +13,7 @@ import java.util.List;
  * @since 2022/7/19 21:10:43
  */
 
-public class DbInfoUtil {
+public class DbInfoUtils {
 
     public static List<DasColumn> getDasColumnList(DbTable dbTable) {
         return new ArrayList<>(DasUtil.getColumns(dbTable).toList());

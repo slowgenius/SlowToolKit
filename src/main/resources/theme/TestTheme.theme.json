@@ -2,7 +2,6 @@
   "name": "TestTheme",
   "dark": true,
   "author": "slowgenius",
-
   "editorScheme": "/resources/theme/TestTheme.xml",
 
   "ui": {

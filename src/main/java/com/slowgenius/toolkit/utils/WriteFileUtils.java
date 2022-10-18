@@ -24,7 +24,7 @@ import java.util.Objects;
  */
 
 @SuppressWarnings("ALL")
-public class WriteFileUtil {
+public class WriteFileUtils {
 
     public static boolean writeByFreemarker(Project project, String templateName, Object param, String path, String fileName) {
         FreemarkerMybatisConfiguration freemarkerMybatisConfiguration = new FreemarkerMybatisConfiguration("/template/mybatis");

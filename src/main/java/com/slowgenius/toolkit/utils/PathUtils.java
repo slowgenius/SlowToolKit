@@ -6,7 +6,7 @@ package com.slowgenius.toolkit.utils;
  * @since 2022/7/19 22:52:56
  */
 
-public class PathUtil {
+public class PathUtils {
 
 
     public static String getPath() {

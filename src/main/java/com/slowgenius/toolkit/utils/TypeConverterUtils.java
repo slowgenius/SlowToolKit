@@ -1,14 +1,12 @@
 package com.slowgenius.toolkit.utils;
 
-import java.math.BigDecimal;
-
 /**
  * @author slowgenius
  * @version SlowToolkit
  * @since 2022/7/19 20:53:41
  */
 
-public class TypeConverter {
+public class TypeConverterUtils {
 
 
     public static String convert(String sqlType) {
