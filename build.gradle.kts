@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.slowgenius"
-version = "2.6.0"
+version = "2.6.1"
 
 repositories {
     mavenCentral()
@@ -13,9 +13,7 @@ repositories {
 }
 
 dependencies {
-    // https://mvnrepository.com/artifact/cn.hutool/hutool-all
     implementation("cn.hutool:hutool-all:5.7.16")
-    // https://mvnrepository.com/artifact/com.alibaba/fastjson
     implementation("com.alibaba:fastjson:2.0.14")
     implementation("org.freemarker:freemarker:2.3.31")
 }

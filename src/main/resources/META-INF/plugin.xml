@@ -34,8 +34,10 @@
 
     <change-notes>
 <![CDATA[
+      <h3>2.6.1</h3>
+      <p> 1.fix bugs</p>
       <h3>2.6.0</h3>
-      <p> 1.provide a json converter can generate a json by right-click an entity class</p>
+      <p> 1.provide a json converter can generate a json by right-click a class</p>
       <h3>2.5.0</h3>
       <p> 1.provide a json formatter in the ToolKit</p>
       <p> 2.you can press alt + enter in the keyboard  to use features in the ToolKit</p>
