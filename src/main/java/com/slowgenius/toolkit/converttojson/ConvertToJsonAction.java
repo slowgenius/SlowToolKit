@@ -5,6 +5,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
@@ -12,13 +13,19 @@ import com.intellij.psi.PsiTypeParameter;
 import com.intellij.psi.PsiTypeParameterListOwner;
 import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.psi.util.PsiUtil;
+import com.slowgenius.toolkit.utils.PsiUtils;
+import com.slowgenius.toolkit.utils.StrUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author slowgenius
@@ -80,29 +87,32 @@ public class ConvertToJsonAction extends AnAction {
             jsonObject.put(field.getName(), randomString(8));
             return jsonObject;
         }
-
         PsiClass obj = PsiUtil.resolveClassInType(field.getType());
-        assert obj != null;
-        if (Objects.requireNonNull(obj.getName()).contains("List")) {
-            PsiClassReferenceType psiClassReferenceType = (PsiClassReferenceType) field;
-            PsiClass resolveClass = psiClassReferenceType.resolve();
-            if (resolveClass instanceof PsiTypeParameter) {
-                PsiTypeParameter typeParameter = (PsiTypeParameter) resolveClass;
-                int index = typeParameter.getIndex();
-                PsiTypeParameterListOwner owner = typeParameter.getOwner();
-                if (owner instanceof PsiClass) {
-                    PsiClass psiClass = (PsiClass) owner;
-                    String qualifiedName = psiClass.getQualifiedName();
-                }
-            }
+        if (obj == null) {
+            return jsonObject;
         }
-        PsiField[] allFields = Objects.requireNonNull(obj).getAllFields();
-        if (allFields.length == 0) {
+
+        if (Objects.requireNonNull(obj.getName()).contains("List")) {
+            String className = field.getType().getCanonicalText().replace("java.util.List<", "").replace(">", "");
+            obj = PsiUtils.getBu(ProjectManager.getInstance().getDefaultProject(), className);
+        }
+        if (obj == null) {
+            return jsonObject;
+        }
+
+        Map<String, PsiField> collect = Arrays.stream(obj.getFields()).collect(Collectors.toMap(PsiField::getName, Function.identity()));
+        List<PsiField> fieldList = Arrays.stream(Objects.requireNonNull(obj).getMethods())
+                .filter(Objects::nonNull)
+                .filter(item -> item.getName().startsWith("get"))
+                .map(item -> collect.getOrDefault(StrUtils.firstLetterLower(item.getName().replace("get", "")), null)).filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        if (fieldList.size() == 0) {
             jsonObject.put(field.getName(), "");
             return jsonObject;
         }
         JSONObject fieldObject = new JSONObject();
-        Arrays.stream(allFields).forEach(item -> {
+        fieldList.forEach(item -> {
             fillInParam(item, fieldObject);
         });
         jsonObject.put(field.getName(), fieldObject);

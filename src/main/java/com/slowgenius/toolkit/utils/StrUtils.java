@@ -50,4 +50,14 @@ public class StrUtils {
         cs[0] -= 32;
         return String.valueOf(cs);
     }
+
+
+    public static String firstLetterLower(String str) {
+        char[] cs = str.toCharArray();
+        if (cs.length == 0) {
+            return "";
+        }
+        cs[0] += 32;
+        return String.valueOf(cs);
+    }
 }
