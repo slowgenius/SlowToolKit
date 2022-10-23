@@ -11,8 +11,8 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.util.PsiUtil;
-import com.slowgenius.toolkit.utils.PsiUtils;
-import com.slowgenius.toolkit.utils.RandomUtils;
+import com.slowgenius.toolkit.utils.SlowPsiUtils;
+import com.slowgenius.toolkit.utils.SlowRandomUtils;
 import com.slowgenius.toolkit.utils.StrUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,9 +37,7 @@ public class ConvertToJsonAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        PsiElement data = Objects.requireNonNull(event.getData(CommonDataKeys.PSI_FILE)).findElementAt(Objects.requireNonNull(event.getData(CommonDataKeys.EDITOR)).getCaretModel().getOffset());
-        assert data != null;
-        PsiClass psiClass = (PsiClass) data.getParent();
+        PsiClass psiClass = SlowPsiUtils.getClassByEvent(event);
         assert psiClass != null;
         JSONObject jsonObject = new JSONObject();
         List<PsiField> fieldList = Arrays.stream(psiClass.getAllFields()).collect(Collectors.toList());
@@ -83,40 +81,40 @@ public class ConvertToJsonAction extends AnAction {
 
     public boolean handleNormalType(PsiField field, JSONObject jsonObject) {
         if (field.getType().getPresentableText().equals("Integer") || field.getType().getPresentableText().equals("int")) {
-            jsonObject.put(field.getName(), RandomUtils.randomInteger(1, 10));
+            jsonObject.put(field.getName(), SlowRandomUtils.randomInteger(1, 10));
             return true;
         }
         if (field.getType().getPresentableText().equals("Byte") || field.getType().getPresentableText().equals("byte")) {
-            jsonObject.put(field.getName(), RandomUtils.randomInteger(1, 10));
+            jsonObject.put(field.getName(), SlowRandomUtils.randomInteger(1, 10));
             return true;
         }
         if (field.getType().getPresentableText().equals("Short") || field.getType().getPresentableText().equals("short")) {
-            jsonObject.put(field.getName(), RandomUtils.randomInteger(1, 10));
+            jsonObject.put(field.getName(), SlowRandomUtils.randomInteger(1, 10));
             return true;
         }
         if (field.getType().getPresentableText().equals("Long") || field.getType().getPresentableText().equals("long")) {
-            jsonObject.put(field.getName(), RandomUtils.randomInteger(1000, 9999));
+            jsonObject.put(field.getName(), SlowRandomUtils.randomInteger(1000, 9999));
             return true;
         }
         if (field.getType().getPresentableText().equals("Double") || field.getType().getPresentableText().equals("double")) {
-            jsonObject.put(field.getName(), RandomUtils.randomInteger(1, 10));
+            jsonObject.put(field.getName(), SlowRandomUtils.randomInteger(1, 10));
             return true;
         }
         if (field.getType().getPresentableText().equals("Float") || field.getType().getPresentableText().equals("float")) {
-            jsonObject.put(field.getName(), RandomUtils.randomInteger(1, 10));
+            jsonObject.put(field.getName(), SlowRandomUtils.randomInteger(1, 10));
             return true;
         }
         if (field.getType().getPresentableText().equals("Boolean") || field.getType().getPresentableText().equals("boolean")) {
-            jsonObject.put(field.getName(), RandomUtils.randomInteger(1, 10));
+            jsonObject.put(field.getName(), SlowRandomUtils.randomInteger(1, 10));
             return true;
         }
         if (field.getType().getPresentableText().equals("Character") || field.getType().getPresentableText().equals("char")) {
-            jsonObject.put(field.getName(), RandomUtils.randomChar());
+            jsonObject.put(field.getName(), SlowRandomUtils.randomChar());
             return true;
         }
 
         if (field.getType().getPresentableText().equals("String")) {
-            jsonObject.put(field.getName(), RandomUtils.randomString(8));
+            jsonObject.put(field.getName(), SlowRandomUtils.randomString(8));
             return true;
         }
         if (field.getType().getPresentableText().equals("Date")) {
@@ -168,9 +166,9 @@ public class ConvertToJsonAction extends AnAction {
 
     public void handleArray(PsiField field, JSONObject jsonObject, Project project) {
         String className = field.getType().getCanonicalText().replace("java.util.List<", "").replace(">", "");
-        PsiClass psiClass = PsiUtils.getBu(project, className);
+        PsiClass psiClass = SlowPsiUtils.getClassByName(project, className);
         JSONArray jsonArray = new JSONArray();
-        for (int i = 0; i < RandomUtils.randomInteger(1, 3); i++) {
+        for (int i = 0; i < SlowRandomUtils.randomInteger(1, 3); i++) {
             JSONObject tempObject = new JSONObject();
             getFields(psiClass).forEach(item -> {
                 fillInParam(item, tempObject, project);

@@ -8,7 +8,7 @@ import java.util.Random;
  * @since 2022/10/18 22:36:01
  */
 
-public class RandomUtils {
+public class SlowRandomUtils {
 
     public static String randomString(int length) {
         String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
