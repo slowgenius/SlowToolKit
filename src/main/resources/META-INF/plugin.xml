@@ -87,8 +87,6 @@
             <className>com.slowgenius.toolkit.requestparam_intention.action.RequestParamIntention</className>
             <category>SlowToolkit</category>
         </intentionAction>
-        <themeProvider id="abf70c0c-34c7-4b87-baf3-dfd4a6506e54"
-                       path="/theme/TestTheme.theme.json"/>
     </extensions>
 
     <actions>
@@ -99,7 +97,7 @@
         </action>
         <action id="gen-api-doc-json" class="com.slowgenius.toolkit.genapidocjson.GenApiDocJsonAction"
                 text="Gen Api Doc Json" description="Generate doc util">
-            <add-to-group group-id="EditorPopupMenu" anchor="before"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
 
         <action id="convert-java-to-json" class="com.slowgenius.toolkit.converttojson.ConvertToJsonAction"

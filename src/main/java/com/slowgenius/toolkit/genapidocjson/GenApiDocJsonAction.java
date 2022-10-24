@@ -2,11 +2,11 @@ package com.slowgenius.toolkit.genapidocjson;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.util.PsiUtil;
@@ -26,38 +26,76 @@ import java.util.stream.Collectors;
 
 public class GenApiDocJsonAction extends AnAction {
 
-    private Project project;
+    private static GenApiDocJsonService genApiDocJsonService;
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        project = event.getProject();
+        genApiDocJsonService = new GenApiDocJsonService(event.getProject());
+        GenApiDocContext context = new GenApiDocContext(event.getProject());
+
+        //获取psiClass
         PsiClass psiClass = SlowPsiUtils.getClassByEvent(event);
-        List<PsiMethod> allApi = getAllApi(psiClass);
-        List<JSONObject> collect = allApi.stream()
-                .map(item -> assembleMethodJson(item)).collect(Collectors.toList());
-        JSONArray jsonArray = new JSONArray(collect);
-        JSONObject result = assembleBaseJson();
-        result.put("paths", jsonArray);
+        context.setJavaClass(psiClass);
+        //获取所有接口方法
+        List<PsiMethod> allApi = genApiDocJsonService.getAllApi(psiClass);
+        context.setApiList(allApi);
+
+        //获取所有body
+        List<JSONObject> bodyList = allApi.stream()
+                .map(item -> assembleBodyJson(item, context)).collect(Collectors.toList());
+
+        JSONObject schemas = new JSONObject();
+        context.getBodyList().forEach(item -> {
+            //已经搞过的对象直接跳过
+            if (schemas.get(item.getName()) != null) {
+                return;
+            }
+            JSONObject schema = new JSONObject();
+            schema.put("type", genApiDocJsonService.getBodyType(item));
+            schema.put("properties", genApiDocJsonService.buildBodyPropertiesJson(item));
+            schema.put("required", genApiDocJsonService.buildBodyRequiredJson(item));
+            schema.put("description", SlowPsiUtils.parseComment(item.getDocComment()));
+            schema.put("x-apifox-folder", psiClass.getName());
+            System.out.println(schema.toJSONString());
+            schemas.put(item.getName(), schema);
+        });
+        JSONObject finalJson = new JSONObject();
+        finalJson.put("schemas", schemas);
+
+        JSONObject components = new JSONObject();
+        components.put("schemas", schemas);
+
+        finalJson.put("openapi", "3.0.1");
+        finalJson.put("components", components);
+
+        System.out.println(JSONObject.toJSONString(finalJson, SerializerFeature.PrettyFormat));
+
+//        List<JSONObject> apiList = Objects.requireNonNull(allApi).stream()
+//                .map(item -> assembleMethodJson(item, context))
+//                .filter(Objects::nonNull)
+//                .collect(Collectors.toList());
+//        JSONArray jsonArray = new JSONArray(apiList);
+//        result.put("paths", jsonArray);
 
 
     }
 
 
-    private JSONObject assembleBaseJson() {
-        JSONObject result = new JSONObject();
-        result.put("openapi", "3.0.1");
-        return result;
-    }
-
-
-    private JSONObject assembleMethodJson(PsiMethod psiMethod) {
+    private JSONObject assembleMethodJson(PsiMethod psiMethod, GenApiDocContext context) {
+        //只处理方法注解上有@{}Mapping注解的方法
+        Optional<PsiAnnotation> mapping = Arrays.stream(psiMethod.getAnnotations()).filter(
+                        item -> Optional.ofNullable(item.getQualifiedName()).orElse("").contains("Mapping"))
+                .findAny();
+        if (mapping.isEmpty()) {
+            return null;
+        }
         JSONObject result = new JSONObject();
         List<PsiParameter> paramList = Arrays.stream(psiMethod.getParameterList().getParameters()).collect(Collectors.toList());
         //设置parameters
         JSONArray paramArray = assembleParamJson(paramList);
         result.put("parameters", paramArray);
         //设置requestBody
-        JSONObject bodyObject = assembleBodyJson(paramList);
+        JSONObject bodyObject = assembleBodyJson(psiMethod, context);
         result.put("requestBody", bodyObject);
         return result;
     }
@@ -73,7 +111,8 @@ public class GenApiDocJsonAction extends AnAction {
     /**
      * 通过参数列表获取到@ReuqestBody标注的对象，并转换成json
      */
-    private JSONObject assembleBodyJson(List<PsiParameter> psiParameter) {
+    private JSONObject assembleBodyJson(PsiMethod psiMethod, GenApiDocContext context) {
+        List<PsiParameter> psiParameter = Arrays.stream(psiMethod.getParameterList().getParameters()).collect(Collectors.toList());
         if (psiParameter == null || psiParameter.isEmpty()) {
             return new JSONObject();
         }
@@ -86,45 +125,18 @@ public class GenApiDocJsonAction extends AnAction {
             return null;
         }
         PsiParameter requestBodyParam = requestBodyOpt.get();
+        PsiClass psiClass = PsiUtil.resolveClassInType(requestBodyParam.getType());
+        String bodyType = genApiDocJsonService.getBodyType(psiClass);
+        context.getBodyList().add(psiClass);
+        if (bodyType.equals("object")) {
+            return genApiDocJsonService.buildObjectSchema(psiClass);
+        }
         JSONObject result = new JSONObject();
-        result.put("type", getParamType(requestBodyParam));
-
-
-        result.put("properties", buildBodyPropertiesJson(requestBodyParam));
-        result.put("required", buildBodyRequiredJson(requestBodyParam));
-        return buildBodyJson(result);
-    }
-
-    private JSONObject buildBodyPropertiesJson(PsiParameter psiParameter) {
-        PsiClass psiClass = PsiUtil.resolveClassInType(psiParameter.getType());
-        if (psiClass == null) {
-            return null;
-        }
-        JSONObject jsonObject = new JSONObject();
-        Arrays.stream(psiClass.getAllFields()).forEach(item -> {
-            JSONObject param = new JSONObject();
-            param.put("description", item.getDocComment());
-            param.put("type", "");
-            param.put("", "");
-            jsonObject.put(item.getName(), param);
-        });
-        return jsonObject;
-    }
-
-    private JSONArray buildBodyRequiredJson(PsiParameter psiParameter) {
-        PsiClass psiClass = PsiUtil.resolveClassInType(psiParameter.getType());
-        JSONArray jsonArray = new JSONArray();
-
-        return jsonArray;
-    }
-
-    private String getParamType(PsiParameter psiParameter) {
-        if (psiParameter.getType().getCanonicalText().contains("List") ||
-                psiParameter.getType().getCanonicalText().contains("Collection") ||
-                psiParameter.getType().getCanonicalText().contains("Set")) {
-            return "array";
-        }
-        return "object";
+        result.put("type", "array");
+        String className = requestBodyParam.getType().getCanonicalText().replace("java.util.List<", "").replace(">", "");
+        PsiClass itemClass = SlowPsiUtils.getClassByName(genApiDocJsonService.getProject(), className);
+        result.put("items", genApiDocJsonService.buildObjectSchema(itemClass));
+        return result;
     }
 
 
@@ -141,20 +153,4 @@ public class GenApiDocJsonAction extends AnAction {
         return result;
     }
 
-    /**
-     * 通过psiClass获取所有方法
-     */
-    private List<PsiMethod> getAllApi(PsiClass psiClass) {
-
-        return null;
-    }
-
-
-    /**
-     * 通过psiMethod 获取所有参数
-     */
-    private List<PsiField> getParams(PsiMethod psiMethod) {
-
-        return null;
-    }
 }

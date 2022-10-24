@@ -16,7 +16,7 @@ import com.intellij.util.SystemProperties;
 import com.slowgenius.toolkit.gen_entity.pojo.TemplateInfo;
 import com.slowgenius.toolkit.utils.DbInfoUtils;
 import com.slowgenius.toolkit.utils.MyActionUtils;
-import com.slowgenius.toolkit.utils.StrUtils;
+import com.slowgenius.toolkit.utils.SlowStrUtils;
 import com.slowgenius.toolkit.utils.TypeConverterUtils;
 import com.slowgenius.toolkit.utils.WriteFileUtils;
 import org.jetbrains.annotations.NotNull;
@@ -58,12 +58,12 @@ public class GenerateEntityAction extends AnAction {
             TemplateInfo templateInfo = new TemplateInfo();
             List<TemplateInfo.FieldInfo> fieldInfoList = DbInfoUtils.getDasColumnList(selectDbTable)
                     .stream()
-                    .map(column -> new TemplateInfo.FieldInfo(StrUtils.underlineToCamel(column.getName()), TypeConverterUtils.convert(column.getDataType().getSpecification()), column.getComment()))
+                    .map(column -> new TemplateInfo.FieldInfo(SlowStrUtils.underlineToCamel(column.getName()), TypeConverterUtils.convert(column.getDataType().getSpecification()), column.getComment()))
                     .collect(Collectors.toList());
 
             templateInfo.setFieldInfoList(fieldInfoList);
 
-            TemplateInfo.ClassInfo classInfo = new TemplateInfo.ClassInfo(StrUtils.underlineToCamel(selectDbTable.getName()), selectDbTable.getComment());
+            TemplateInfo.ClassInfo classInfo = new TemplateInfo.ClassInfo(SlowStrUtils.underlineToCamel(selectDbTable.getName()), selectDbTable.getComment());
             templateInfo.setClassInfo(classInfo);
             templateInfo.setPackageInfo(selectedPackage.getQualifiedName());
             templateInfo.setSince(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm:ss")));

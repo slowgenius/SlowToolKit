@@ -1,6 +1,6 @@
 package com.slowgenius.toolkit.gen_entity.pojo;
 
-import com.slowgenius.toolkit.utils.StrUtils;
+import com.slowgenius.toolkit.utils.SlowStrUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -112,7 +112,7 @@ public class TemplateInfo {
         private String comment;
 
         public ClassInfo(String name, String comment) {
-            this.name = StrUtils.firstLetterUpper(Optional.ofNullable(name).orElse(" "));
+            this.name = SlowStrUtils.firstLetterUpper(Optional.ofNullable(name).orElse(" "));
             this.comment = Optional.ofNullable(comment).orElse("");
         }
 

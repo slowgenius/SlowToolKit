@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  * @since 2022/6/26 17:53:57
  */
 
-public class StrUtils {
+public class SlowStrUtils {
 
 
     /**
@@ -59,5 +59,9 @@ public class StrUtils {
         }
         cs[0] += 32;
         return String.valueOf(cs);
+    }
+
+    public static String getComment(String str) {
+        return str.replace("*", "").replace("/", "").trim();
     }
 }

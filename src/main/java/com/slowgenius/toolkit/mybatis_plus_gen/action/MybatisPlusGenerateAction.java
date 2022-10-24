@@ -12,7 +12,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
-import com.slowgenius.toolkit.utils.StrUtils;
+import com.slowgenius.toolkit.utils.SlowStrUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -44,7 +44,7 @@ public class MybatisPlusGenerateAction extends AnAction {
                 if (field.getName().equals("id")) {
                     anno = "TableId(\"id\")";
                 } else {
-                    anno = "TableField(\"" + StrUtils.camelToUnderline(field.getName()) + "\")";
+                    anno = "TableField(\"" + SlowStrUtils.camelToUnderline(field.getName()) + "\")";
                 }
                 Objects.requireNonNull(field.getModifierList()).addAnnotation(anno);
             }

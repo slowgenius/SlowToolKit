@@ -13,7 +13,6 @@ import com.intellij.psi.PsiField;
 import com.intellij.psi.util.PsiUtil;
 import com.slowgenius.toolkit.utils.SlowPsiUtils;
 import com.slowgenius.toolkit.utils.SlowRandomUtils;
-import com.slowgenius.toolkit.utils.StrUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -22,9 +21,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -151,7 +148,7 @@ public class ConvertToJsonAction extends AnAction {
         if (obj == null || obj.getFields().length == 0) {
             return;
         }
-        List<PsiField> fieldList = getFields(obj);
+        List<PsiField> fieldList = SlowPsiUtils.getFields(obj);
         //没有属性就填充空字段
         if (fieldList.size() == 0) {
             jsonObject.put(field.getName(), new JSONObject());
@@ -170,7 +167,7 @@ public class ConvertToJsonAction extends AnAction {
         JSONArray jsonArray = new JSONArray();
         for (int i = 0; i < SlowRandomUtils.randomInteger(1, 3); i++) {
             JSONObject tempObject = new JSONObject();
-            getFields(psiClass).forEach(item -> {
+            SlowPsiUtils.getFields(psiClass).forEach(item -> {
                 fillInParam(item, tempObject, project);
             });
             jsonArray.add(tempObject);
@@ -178,12 +175,4 @@ public class ConvertToJsonAction extends AnAction {
         jsonObject.put(field.getName(), jsonArray);
     }
 
-    private List<PsiField> getFields(PsiClass psiClass) {
-        Map<String, PsiField> collect = Arrays.stream(psiClass.getFields()).collect(Collectors.toMap(PsiField::getName, Function.identity()));
-        return Arrays.stream(Objects.requireNonNull(psiClass).getMethods())
-                .filter(Objects::nonNull)
-                .filter(item -> item.getName().startsWith("get"))
-                .map(item -> collect.getOrDefault(StrUtils.firstLetterLower(item.getName().replace("get", "")), null)).filter(Objects::nonNull)
-                .collect(Collectors.toList());
-    }
 }
