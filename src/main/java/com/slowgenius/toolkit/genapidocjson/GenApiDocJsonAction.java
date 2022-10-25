@@ -70,13 +70,16 @@ public class GenApiDocJsonAction extends AnAction {
         finalJson.put("openapi", "3.0.1");
         finalJson.put("components", components);
 
+        JSONObject pathJson = new JSONObject();
 
-        List<JSONObject> apiList = Objects.requireNonNull(allApi).stream()
-                .map(item -> buildMethodJson(item, context))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-        JSONArray jsonArray = new JSONArray(apiList);
-        finalJson.put("paths", jsonArray);
+        Objects.requireNonNull(allApi)
+                .forEach(item -> {
+                    Optional<PsiAnnotation> mapping = Arrays.stream(item.getAnnotations()).filter(annotation -> annotation.getQualifiedName().contains("Mapping")).findAny();
+                    JSONObject jsonObject = buildMethodJson(item, context);
+                    pathJson.put(mapping.get().getQualifiedName(), jsonObject);
+                });
+
+        finalJson.put("paths", pathJson);
 
         System.out.println(JSONObject.toJSONString(finalJson, SerializerFeature.PrettyFormat));
     }
@@ -104,9 +107,9 @@ public class GenApiDocJsonAction extends AnAction {
 
     private JSONArray assembleParamJson(List<PsiParameter> psiParameter) {
         JSONArray result = new JSONArray();
-        psiParameter.forEach(item->{
-                    result.add(item.getName());
-                });
+        psiParameter.forEach(item -> {
+            result.add(item.getName());
+        });
         return result;
     }
 
