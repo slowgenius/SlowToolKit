@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -51,6 +52,7 @@ public class GenApiDocJsonAction extends AnAction {
                 return;
             }
             JSONObject schema = new JSONObject();
+            genApiDocJsonService.buildObjectSchema(item);
             schema.put("type", genApiDocJsonService.getBodyType(item));
             schema.put("properties", genApiDocJsonService.buildBodyPropertiesJson(item));
             schema.put("required", genApiDocJsonService.buildBodyRequiredJson(item));
@@ -68,23 +70,22 @@ public class GenApiDocJsonAction extends AnAction {
         finalJson.put("openapi", "3.0.1");
         finalJson.put("components", components);
 
+
+        List<JSONObject> apiList = Objects.requireNonNull(allApi).stream()
+                .map(item -> buildMethodJson(item, context))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        JSONArray jsonArray = new JSONArray(apiList);
+        finalJson.put("paths", jsonArray);
+
         System.out.println(JSONObject.toJSONString(finalJson, SerializerFeature.PrettyFormat));
-
-//        List<JSONObject> apiList = Objects.requireNonNull(allApi).stream()
-//                .map(item -> assembleMethodJson(item, context))
-//                .filter(Objects::nonNull)
-//                .collect(Collectors.toList());
-//        JSONArray jsonArray = new JSONArray(apiList);
-//        result.put("paths", jsonArray);
-
-
     }
 
 
-    private JSONObject assembleMethodJson(PsiMethod psiMethod, GenApiDocContext context) {
+    private JSONObject buildMethodJson(PsiMethod psiMethod, GenApiDocContext context) {
         //只处理方法注解上有@{}Mapping注解的方法
-        Optional<PsiAnnotation> mapping = Arrays.stream(psiMethod.getAnnotations()).filter(
-                        item -> Optional.ofNullable(item.getQualifiedName()).orElse("").contains("Mapping"))
+        Optional<PsiAnnotation> mapping = Arrays.stream(psiMethod.getAnnotations())
+                .filter(item -> Optional.ofNullable(item.getQualifiedName()).orElse("").contains("Mapping"))
                 .findAny();
         if (mapping.isEmpty()) {
             return null;
@@ -102,9 +103,10 @@ public class GenApiDocJsonAction extends AnAction {
 
 
     private JSONArray assembleParamJson(List<PsiParameter> psiParameter) {
-
         JSONArray result = new JSONArray();
-
+        psiParameter.forEach(item->{
+                    result.add(item.getName());
+                });
         return result;
     }
 
@@ -113,7 +115,7 @@ public class GenApiDocJsonAction extends AnAction {
      */
     private JSONObject assembleBodyJson(PsiMethod psiMethod, GenApiDocContext context) {
         List<PsiParameter> psiParameter = Arrays.stream(psiMethod.getParameterList().getParameters()).collect(Collectors.toList());
-        if (psiParameter == null || psiParameter.isEmpty()) {
+        if (psiParameter.isEmpty()) {
             return new JSONObject();
         }
         //获取requestBody注解标注的参数
