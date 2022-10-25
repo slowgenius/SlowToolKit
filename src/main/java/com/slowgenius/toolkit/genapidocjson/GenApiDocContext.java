@@ -1,11 +1,17 @@
 package com.slowgenius.toolkit.genapidocjson;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author slowgenius
@@ -15,13 +21,17 @@ import java.util.List;
 public class GenApiDocContext {
 
 
+    private Map<PsiMethod, PsiType> methodBodyMap = new HashMap<>();
     private List<PsiMethod> apiList;
 
     private final Project project;
 
-    private PsiClass javaClass;
+    private PsiClass controller;
 
-    private List<PsiClass> bodyList = new ArrayList<>();
+    private List<PsiType> bodyList = new ArrayList<>();
+
+    private String basePath;
+
 
     public GenApiDocContext(Project project) {
         this.project = project;
@@ -36,19 +46,58 @@ public class GenApiDocContext {
         this.apiList = apiList;
     }
 
-    public PsiClass getJavaClass() {
-        return javaClass;
+    public PsiClass getController() {
+        return controller;
     }
 
-    public void setJavaClass(PsiClass javaClass) {
-        this.javaClass = javaClass;
+    public void setController(PsiClass controller) {
+        this.controller = controller;
+
+        Optional<PsiAnnotation> mapping = Arrays.stream(controller.getAnnotations())
+                .filter(item -> item.getText().contains("Mapping")).findAny();
+        if (mapping.isEmpty()) {
+            basePath = "";
+            return;
+        }
+        basePath = mapping.get().getText().replaceAll("@\\w+Mapping", "")
+                .replace("\"", "")
+                .replace("(", "")
+                .replace(")", "");
     }
 
-    public List<PsiClass> getBodyList() {
+    public List<PsiType> getBodyList() {
         return bodyList;
     }
 
-    public void setBodyList(List<PsiClass> bodyList) {
+    public void setBodyList(List<PsiType> bodyList) {
         this.bodyList = bodyList;
+    }
+
+    public String BasePath() {
+        Optional<PsiAnnotation> mapping = Arrays.stream(controller.getAnnotations())
+                .filter(item -> item.getText().contains("Mapping")).findAny();
+        if (mapping.isEmpty()) {
+            return "";
+        }
+        return mapping.get().getText().replaceAll("@\\w+Mapping", "")
+                .replace("\"", "")
+                .replace("(", "")
+                .replace(")", "");
+    }
+
+    public String getBasePath() {
+        return basePath;
+    }
+
+    public void setBasePath(String basePath) {
+        this.basePath = basePath;
+    }
+
+    public Map<PsiMethod, PsiType> getMethodBodyMap() {
+        return methodBodyMap;
+    }
+
+    public void setMethodBodyMap(Map<PsiMethod, PsiType> methodBodyMap) {
+        this.methodBodyMap = methodBodyMap;
     }
 }

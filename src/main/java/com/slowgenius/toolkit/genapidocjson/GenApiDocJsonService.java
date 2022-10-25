@@ -33,13 +33,19 @@ public class GenApiDocJsonService {
     /**
      * 通过psiClass获取所有方法
      */
-    public List<PsiMethod> getAllApi(PsiClass psiClass) {
-        return Arrays.stream(psiClass.getMethods())
+    public void getAllApi(PsiClass psiClass, GenApiDocContext context) {
+        List<PsiMethod> mapping = Arrays.stream(psiClass.getMethods())
                 .filter(item -> Arrays.stream(item.getAnnotations())
                         .anyMatch(annotation -> annotation.getQualifiedName().contains("Mapping")))
                 .collect(Collectors.toList());
+        context.setApiList(mapping);
     }
 
+
+    public JSONObject buildBodyPropertiesJson(PsiType psiType) {
+        PsiClass psiClass = SlowPsiUtils.getClassByTYpe(psiType);
+        return buildBodyPropertiesJson(psiClass);
+    }
 
     public JSONObject buildBodyPropertiesJson(PsiClass psiClass) {
         if (psiClass == null) {
@@ -48,13 +54,9 @@ public class GenApiDocJsonService {
         JSONObject jsonObject = new JSONObject();
         Arrays.stream(psiClass.getAllFields()).forEach(item -> {
             JSONObject param = new JSONObject();
-            String type = this.parseBodyFieldType(item.getType());
-            if (type.equals("object")) {
-                param = buildObjectSchema(SlowPsiUtils.getClassByName(project, item.getType().getCanonicalText()));
-            } else if (type.equals("array")) {
-                param.put("type", "array");
-                JSONObject arrayItem = buildObjectSchema(SlowPsiUtils.getClassByName(project, item.getType().getCanonicalText()));
-                param.put("items", arrayItem);
+            String type = this.parseBodyFieldType(item.getType().getPresentableText());
+            if (type.equals("object") || type.equals("array")) {
+                param = buildObjectSchema(item.getType());
             } else {
                 param.put("type", type);
                 param.put("description", SlowPsiUtils.parseComment(item.getDocComment()));
@@ -73,13 +75,44 @@ public class GenApiDocJsonService {
         return "object";
     }
 
-    public JSONObject buildObjectSchema(PsiClass psiClass) {
+    public JSONObject buildObjectSchema(PsiType psiType) {
+        PsiClass psiClass = SlowPsiUtils.getClassByTYpe(psiType);
         JSONObject schema = new JSONObject();
-        schema.put("type", "object");
-        schema.put("properties", buildBodyPropertiesJson(psiClass));
-        schema.put("required", buildBodyRequiredJson(psiClass));
-        schema.put("description", SlowPsiUtils.parseComment(psiClass.getDocComment()));
+        String bodyType = getBodyType(psiClass);
+        if (bodyType.equals("array")) {
+            buildArray(schema, psiType);
+            return schema;
+        }
+        buildObject(schema, psiClass);
         return schema;
+    }
+
+    public void buildArray(JSONObject schema, PsiType psiType) {
+        schema.put("type", "array");
+        String className = psiType.getCanonicalText().replace("java.util.List<", "").replace(">", "");
+        String itemType = parseBodyFieldType(className);
+        if (itemType.equals("object")) {
+            PsiClass classByName = SlowPsiUtils.getClassByName(project, className);
+            JSONObject object = new JSONObject();
+            buildObject(object, classByName);
+            schema.put("items", object);
+            return;
+        }
+        JSONObject item = new JSONObject();
+        item.put("type", itemType);
+        schema.put("item", item);
+    }
+
+    public void buildObject(JSONObject jsonObject, PsiClass psiClass) {
+        jsonObject.put("type", "object");
+        jsonObject.put("properties", buildBodyPropertiesJson(psiClass));
+        jsonObject.put("required", buildBodyRequiredJson(psiClass));
+        jsonObject.put("description", SlowPsiUtils.parseComment(psiClass.getDocComment()));
+    }
+
+    public JSONArray buildBodyRequiredJson(PsiType psiType) {
+        PsiClass psiClass = SlowPsiUtils.getClassByTYpe(psiType);
+        return buildBodyRequiredJson(psiClass);
     }
 
     public JSONArray buildBodyRequiredJson(PsiClass psiClass) {
@@ -92,47 +125,47 @@ public class GenApiDocJsonService {
         return jsonArray;
     }
 
-    public String parseBodyFieldType(PsiType type) {
-        if (type.getPresentableText().equals("Integer") || type.getPresentableText().equals("int")) {
+    public String parseBodyFieldType(String type) {
+        if (type.equals("Integer") || type.equals("int")) {
             return "integer";
         }
-        if (type.getPresentableText().equals("Byte") || type.getPresentableText().equals("byte")) {
+        if (type.equals("Byte") || type.equals("byte")) {
             return "integer";
         }
-        if (type.getPresentableText().equals("Short") || type.getPresentableText().equals("short")) {
+        if (type.equals("Short") || type.equals("short")) {
             return "integer";
         }
-        if (type.getPresentableText().equals("Long") || type.getPresentableText().equals("long")) {
+        if (type.equals("Long") || type.equals("long")) {
             return "integer";
         }
 
-        if (type.getPresentableText().equals("Double") || type.getPresentableText().equals("double")) {
+        if (type.equals("Double") || type.equals("double")) {
             return "number";
         }
-        if (type.getPresentableText().equals("Float") || type.getPresentableText().equals("float")) {
+        if (type.equals("Float") || type.equals("float")) {
             return "number";
         }
-        if (type.getPresentableText().equals("Boolean") || type.getPresentableText().equals("boolean")) {
+        if (type.equals("Boolean") || type.equals("boolean")) {
             return "boolean";
         }
-        if (type.getPresentableText().equals("Date")) {
+        if (type.equals("Date")) {
             return "string";
         }
-        if (type.getPresentableText().equals("LocalDateTime")) {
+        if (type.equals("LocalDateTime")) {
             return "string";
         }
-        if (type.getPresentableText().equals("LocalDate")) {
+        if (type.equals("LocalDate")) {
             return "string";
         }
-        if (type.getPresentableText().equals("LocalTime")) {
+        if (type.equals("LocalTime")) {
             return "string";
         }
-        if (type.getPresentableText().equals("String")) {
+        if (type.equals("String")) {
             return "string";
         }
-        if (type.getPresentableText().contains("List") ||
-                type.getPresentableText().contains("Collection") ||
-                type.getPresentableText().contains("Set")) {
+        if (type.contains("List") ||
+                type.contains("Collection") ||
+                type.contains("Set")) {
             return "array";
         }
 

@@ -7,8 +7,10 @@ import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiType;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.util.PsiUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -49,5 +51,9 @@ public class SlowPsiUtils {
                 .map(item -> collect.getOrDefault(SlowStrUtils.firstLetterLower(item.getName().replace("get", "")), null)).filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
+    }
+
+    public static PsiClass getClassByTYpe(PsiType psiType) {
+        return PsiUtil.resolveClassInType(psiType);
     }
 }
