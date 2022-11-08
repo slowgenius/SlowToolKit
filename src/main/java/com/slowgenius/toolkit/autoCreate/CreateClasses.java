@@ -45,9 +45,6 @@ public class CreateClasses extends AnAction {
         super(PlatformIcons.CLASS_ICON);
     }
 
-    /**
-     * @param anActionEvent
-     */
     @Override
     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
         this.anActionEvent = anActionEvent;
@@ -118,10 +115,13 @@ public class CreateClasses extends AnAction {
     }
 
     protected void buildDialog(@NotNull Project project, @NotNull PsiDirectory directory, CreateFileFromTemplateDialog.@NotNull Builder builder) {
-        builder.setTitle("Create Classes");
+        builder.setTitle("Intelligence Create");
         builder.addKind("Class", PlatformIcons.CLASS_ICON, "Class");
         Arrays.stream(FileTemplateManager.getInstance(project).getAllTemplates())
                 .forEach(item -> {
+                    if (item.getName().equals("JavaFXApplication")) {
+                        return;
+                    }
                     builder.addKind(item.getName(), null, item.getName());
                 });
         builder.setValidator(new InputValidatorEx() {
