@@ -7,7 +7,7 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
-import com.slowgenius.toolkit.gen_entity.config.FreemarkerMybatisConfiguration;
+import com.slowgenius.toolkit.gen.entity.config.FreemarkerMybatisConfiguration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 

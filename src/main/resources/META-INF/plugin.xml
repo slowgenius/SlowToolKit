@@ -80,11 +80,11 @@
                     anchor="bottom"
                     factoryClass="com.slowgenius.toolkit.toolkit.ToolKitFactory"
                     icon="/icons/refresh.svg"/>
-        <applicationService serviceImplementation="com.slowgenius.toolkit.project_gen.infrastructure.DataSetting"/>
-        <projectTemplatesFactory implementation="com.slowgenius.toolkit.project_gen.factory.TemplateFactory"/>
+        <applicationService serviceImplementation="com.slowgenius.toolkit.gen.project.infrastructure.DataSetting"/>
+        <projectTemplatesFactory implementation="com.slowgenius.toolkit.gen.project.factory.TemplateFactory"/>
 
         <intentionAction>
-            <className>com.slowgenius.toolkit.requestparam_intention.action.RequestParamIntention</className>
+            <className>com.slowgenius.toolkit.intention.requestparam.action.RequestParamIntention</className>
             <category>SlowToolkit</category>
         </intentionAction>
     </extensions>
@@ -95,7 +95,7 @@
             <add-to-group group-id="GenerateGroup" anchor="last"/>
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift K"/>
         </action>
-        <action id="gen-api-doc-json" class="com.slowgenius.toolkit.genapidocjson.GenApiDocJsonAction"
+        <action id="gen-api-doc-json" class="com.slowgenius.toolkit.gen.apidocjson.GenApiDocJsonAction"
                 text="Gen Api Doc Json" description="Generate doc util">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
@@ -113,7 +113,7 @@
         <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift o"/>-->
         <!--        </action>-->
 
-        <action id="gen-java-class" class="com.slowgenius.toolkit.gen_entity.action.GenerateEntityAction"
+        <action id="gen-java-class" class="com.slowgenius.toolkit.gen.entity.action.GenerateEntityAction"
                 text="Gen Java Entity"
                 popup="true">
             <!--生成代码菜单-->
