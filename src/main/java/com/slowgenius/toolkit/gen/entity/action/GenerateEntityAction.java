@@ -8,7 +8,10 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiPackage;
@@ -20,6 +23,7 @@ import com.slowgenius.toolkit.utils.SlowStrUtils;
 import com.slowgenius.toolkit.utils.TypeConverterUtils;
 import com.slowgenius.toolkit.utils.WriteFileUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.jps.model.java.JavaSourceRootType;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -36,24 +40,13 @@ public class GenerateEntityAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
+        //新建一个包选择器，并显示
         PackageChooserDialog packageChooserDialog = new PackageChooserDialog("Package Chooser", event.getProject());
-
-        //packageChooserDialog.selectPackage("com.slowgenius.entity");
         packageChooserDialog.show();
-
-
-//        ModuleManager.getInstance(event.getProject()).findModuleByName("name");
-//
-        ModuleManager moduleManager = ModuleManager.getInstance(event.getProject());
-        Module[] modules = moduleManager.getModules();
-//
-//
-//        List<VirtualFile> virtualFileList = ModuleRootManager.getInstance(module).getSourceRoots(JavaSourceRootType.SOURCE);
 
         PsiPackage selectedPackage = packageChooserDialog.getSelectedPackage();
         List<DbTable> selectDbTableList = Optional.ofNullable(MyActionUtils.getDbTableList(event)).orElseThrow(RuntimeException::new);
 
-        PsiDirectory possiblePackageDirectoryInModule = PackageUtil.findPossiblePackageDirectoryInModule(modules[0], "com.slowgenius");
         selectDbTableList.forEach(selectDbTable -> {
             TemplateInfo templateInfo = new TemplateInfo();
             List<TemplateInfo.FieldInfo> fieldInfoList = DbInfoUtils.getDasColumnList(selectDbTable)
@@ -83,4 +76,22 @@ public class GenerateEntityAction extends AnAction {
         PsiElement psiElement = MyActionUtils.getPsiElement(e);
         e.getPresentation().setEnabledAndVisible(psiElement instanceof DbTable);
     }
+
+
+    public Module findModuleByName(Project project) {
+        return ModuleManager.getInstance(project).findModuleByName("name");
+    }
+
+    public PsiDirectory findPossiblePackageDirectoryInModule(Module module, String packageName) {
+        return PackageUtil.findPossiblePackageDirectoryInModule(module, packageName);
+    }
+
+    public List<VirtualFile> getFileList(Module module) {
+        return ModuleRootManager.getInstance(module).getSourceRoots(JavaSourceRootType.SOURCE);
+    }
+
+    public ModuleManager getModuleManager(Project project) {
+        return ModuleManager.getInstance(project);
+    }
+
 }

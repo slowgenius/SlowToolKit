@@ -38,21 +38,20 @@ public class MybatisPlusGenerateAction extends AnAction {
         }
         Project project = event.getProject();
         assert project != null;
+        //执行写命令
         WriteCommandAction.runWriteCommandAction(project, () -> {
+            //添加竹节
             for (PsiField field : psiClass.getFields()) {
-                String anno;
-                if (field.getName().equals("id")) {
-                    anno = "TableId(\"id\")";
-                } else {
-                    anno = "TableField(\"" + SlowStrUtils.camelToUnderline(field.getName()) + "\")";
-                }
+                String anno = field.getName().equals("id") ? "TableId(\"id\")" : "TableField(\"" + SlowStrUtils.camelToUnderline(field.getName()) + "\")";
                 Objects.requireNonNull(field.getModifierList()).addAnnotation(anno);
             }
+            //添加import
             Document document = Objects.requireNonNull(event.getData(CommonDataKeys.EDITOR)).getDocument();
             PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(document);
             document.insertString(psiClass.getParent().getChildren()[1].getTextOffset(), "import com.baomidou.mybatisplus.annotation.TableId;\nimport com.baomidou.mybatisplus.annotation.TableField;");
+            //提交
             PsiDocumentManager.getInstance(project).commitAllDocuments();
-
+            //格式化代码
             CodeStyleManager.getInstance(project).reformat(psiClass);
             JavaCodeStyleManager.getInstance(project).optimizeImports(Objects.requireNonNull(event.getData(CommonDataKeys.PSI_FILE)));
         });
