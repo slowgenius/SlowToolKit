@@ -1,4 +1,4 @@
-package com.slowgenius.toolkit.mybatis_plus_gen.action;
+package com.slowgenius.toolkit.gen.mybatis;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;

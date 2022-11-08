@@ -1,4 +1,4 @@
-package com.slowgenius.toolkit.intention.requestparam.action;
+package com.slowgenius.toolkit.intention.requestparam;
 
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;

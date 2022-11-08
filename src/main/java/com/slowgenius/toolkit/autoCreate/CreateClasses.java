@@ -1,4 +1,4 @@
-package com.slowgenius.toolkit.create_classes.action;
+package com.slowgenius.toolkit.autoCreate;
 
 
 import com.intellij.ide.IdeView;

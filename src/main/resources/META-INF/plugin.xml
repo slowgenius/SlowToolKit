@@ -84,13 +84,13 @@
         <projectTemplatesFactory implementation="com.slowgenius.toolkit.gen.project.factory.TemplateFactory"/>
 
         <intentionAction>
-            <className>com.slowgenius.toolkit.intention.requestparam.action.RequestParamIntention</className>
+            <className>com.slowgenius.toolkit.intention.requestparam.RequestParamIntention</className>
             <category>SlowToolkit</category>
         </intentionAction>
     </extensions>
 
     <actions>
-        <action id="mybatis-plus-gen" class="com.slowgenius.toolkit.mybatis_plus_gen.action.MybatisPlusGenerateAction"
+        <action id="mybatis-plus-gen" class="com.slowgenius.toolkit.gen.mybatis.MybatisPlusGenerateAction"
                 text="Gen @TableField" description="Generate util" icon="/icons/logo.svg">
             <add-to-group group-id="GenerateGroup" anchor="last"/>
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift K"/>
@@ -104,7 +104,7 @@
                 text="Convert to Json" description="Convert java to json">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
-        <action id="CreateClasses" class="com.slowgenius.toolkit.create_classes.action.CreateClasses"
+        <action id="CreateClasses" class="com.slowgenius.toolkit.autoCreate.CreateClasses"
                 text="Create Classes">
             <add-to-group group-id="NewGroup1" anchor="first"/>
         </action>
