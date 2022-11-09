@@ -33,7 +33,7 @@
     </description>
 
     <change-notes>
-<![CDATA[
+        <![CDATA[
       <h3>2.6.1</h3>
       <p> 1.fix bugs</p>
       <h3>2.6.0</h3>
@@ -87,6 +87,11 @@
             <className>com.slowgenius.toolkit.intention.requestparam.RequestParamIntention</className>
             <category>SlowToolkit</category>
         </intentionAction>
+        <applicationConfigurable
+                parentId="tools"
+                instance="com.slowgenius.toolkit.base.SlowToolKitSetting"
+                id="SlowToolKitSetting"
+                displayName="SlowToolKit"/>
     </extensions>
 
     <actions>

@@ -32,7 +32,7 @@ public class MybatisPlusGenerateAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
         PsiElement data = Objects.requireNonNull(event.getData(CommonDataKeys.PSI_FILE)).findElementAt(Objects.requireNonNull(event.getData(CommonDataKeys.EDITOR)).getCaretModel().getOffset());
-        PsiClass psiClass = getPsiClass(data);
+        PsiClass psiClass = recursionGetPsiElement(data);
         if (psiClass == null) {
             return;
         }
@@ -60,7 +60,7 @@ public class MybatisPlusGenerateAction extends AnAction {
     @Override
     public void update(@NotNull AnActionEvent event) {
         PsiElement data = Objects.requireNonNull(event.getData(CommonDataKeys.PSI_FILE)).findElementAt(Objects.requireNonNull(event.getData(CommonDataKeys.EDITOR)).getCaretModel().getOffset());
-        PsiClass psiClass = getPsiClass(data);
+        PsiClass psiClass = recursionGetPsiElement(data);
         if (psiClass == null) {
             event.getPresentation().setEnabledAndVisible(false);
             return;
@@ -68,7 +68,7 @@ public class MybatisPlusGenerateAction extends AnAction {
         event.getPresentation().setEnabledAndVisible(true);
     }
 
-    private PsiClass getPsiClass(PsiElement data) {
+    public PsiClass recursionGetPsiElement(PsiElement data) {
         int count = 0;
         while (!(data instanceof PsiClass)) {
             assert data != null;

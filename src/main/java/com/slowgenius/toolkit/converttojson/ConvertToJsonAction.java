@@ -38,9 +38,7 @@ public class ConvertToJsonAction extends AnAction {
         assert psiClass != null;
         JSONObject jsonObject = new JSONObject();
         List<PsiField> fieldList = Arrays.stream(psiClass.getAllFields()).collect(Collectors.toList());
-        fieldList.forEach(item -> {
-            fillInParam(item, jsonObject, event.getProject());
-        });
+        fieldList.forEach(item -> fillInParam(item, jsonObject, event.getProject()));
         String s = JSONObject.toJSONString(jsonObject, SerializerFeature.PrettyFormat);
         StringSelection selection = new StringSelection(s);
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);

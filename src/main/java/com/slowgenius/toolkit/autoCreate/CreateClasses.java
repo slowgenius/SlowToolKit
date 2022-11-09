@@ -18,6 +18,7 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiPackage;
 import com.intellij.util.PlatformIcons;
+import com.slowgenius.toolkit.base.VisibleConfig;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -142,5 +143,11 @@ public class CreateClasses extends AnAction {
 
     private PsiDirectory createPackage(PsiDirectory directory, String packageName) {
         return directory.createSubdirectory(packageName);
+    }
+
+
+    @Override
+    public void update(@NotNull AnActionEvent e) {
+        e.getPresentation().setEnabledAndVisible(VisibleConfig.INSTANCE.getProperties().get("create classes"));
     }
 }
