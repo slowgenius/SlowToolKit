@@ -8,7 +8,6 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.InputValidatorEx;
 import com.intellij.openapi.util.text.StringUtil;
@@ -16,8 +15,8 @@ import com.intellij.psi.JavaDirectoryService;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiPackage;
 import com.intellij.util.PlatformIcons;
+import com.slowgenius.toolkit.base.SlowAbstractAction;
 import com.slowgenius.toolkit.base.VisibleConfig;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,20 +34,10 @@ import java.util.stream.Collectors;
  * @since 2022/6/29 20:50:08
  */
 
-public class CreateClasses extends AnAction {
-
-    private AnActionEvent anActionEvent;
-
-    public CreateClasses() {
-    }
-
-    public CreateClasses(Icon icon) {
-        super(PlatformIcons.CLASS_ICON);
-    }
+public class CreateClasses extends SlowAbstractAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
-        this.anActionEvent = anActionEvent;
         Project project = anActionEvent.getProject();
         DataContext dataContext = anActionEvent.getDataContext();
         IdeView view = LangDataKeys.IDE_VIEW.getData(dataContext);
@@ -57,7 +46,7 @@ public class CreateClasses extends AnAction {
             assert dir != null;
             assert project != null;
             CreateFileFromTemplateDialog.Builder builder = CreateFileFromTemplateDialog.createDialog(project);
-            this.buildDialog(project, dir, builder);
+            this.buildDialog(project, builder);
             builder.show("Error", "class", new CreateFileFromTemplateDialog.FileCreator<>() {
                 public PsiElement createFile(@NotNull String name, @NotNull String templateName) {
                     if (Character.isLowerCase(name.charAt(0))) {
@@ -70,9 +59,7 @@ public class CreateClasses extends AnAction {
                         collect = Collections.singletonList(name);
                     }
                     List<PsiClass> result = new ArrayList<>();
-                    collect.forEach(className -> {
-                        result.add(JavaDirectoryService.getInstance().createClass(dir, className, templateName, true));
-                    });
+                    collect.forEach(className -> result.add(JavaDirectoryService.getInstance().createClass(dir, className, templateName, true)));
                     //返回第一个元素
                     return result.get(0);
                 }
@@ -93,33 +80,12 @@ public class CreateClasses extends AnAction {
 
     }
 
-    private List<PsiPackage> getAllSubPackage(List<PsiPackage> psiPackage) {
-
-        List<PsiPackage> result = psiPackage.parallelStream()
-                .flatMap(item -> {
-                    List<PsiPackage> temp = new ArrayList<>();
-                    ApplicationManager.getApplication().runReadAction(() -> {
-                        if (item.getClasses().length != 0 || item.getSubPackages().length == 0) {
-                            temp.add(item);
-                        }
-                        temp.addAll(Arrays.stream(item.getSubPackages()).collect(Collectors.toList()));
-                    });
-                    return temp.parallelStream();
-                })
-                .distinct()
-                .collect(Collectors.toList());
-
-        if (result.size() == psiPackage.size()) {
-            return result;
-        }
-        return getAllSubPackage(result);
-    }
-
-    protected void buildDialog(@NotNull Project project, @NotNull PsiDirectory directory, CreateFileFromTemplateDialog.@NotNull Builder builder) {
+    protected void buildDialog(@NotNull Project project, CreateFileFromTemplateDialog.@NotNull Builder builder) {
         builder.setTitle("Intelligence Create");
         builder.addKind("Class", PlatformIcons.CLASS_ICON, "Class");
         Arrays.stream(FileTemplateManager.getInstance(project).getAllTemplates())
                 .forEach(item -> {
+                    //好像默认会有这个模版，遇到就跳过
                     if (item.getName().equals("JavaFXApplication")) {
                         return;
                     }
@@ -147,7 +113,7 @@ public class CreateClasses extends AnAction {
 
 
     @Override
-    public void update(@NotNull AnActionEvent e) {
-        e.getPresentation().setEnabledAndVisible(VisibleConfig.INSTANCE.getProperties().get("create classes"));
+    public String getActionKey() {
+        return "intelli create";
     }
 }

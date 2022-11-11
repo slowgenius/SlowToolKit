@@ -1,14 +1,12 @@
 package com.slowgenius.toolkit.base;
 
 import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.ui.JBColor;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 插件配置项
@@ -19,16 +17,18 @@ import java.awt.event.FocusListener;
 public class SlowToolKitSetting implements Configurable {
     JComponent component;
 
-    JTextField something;
+    private HashMap<JComponent, String> configInfo;
 
     public SlowToolKitSetting() {
         this.component = new JPanel();
         this.component.setLayout(new GridLayout(15, 1));
+        VisibleConfig state = VisibleConfig.INSTANCE.getState();
+        assert state != null;
+        state.getProperties().forEach((k, v) -> {
+            JTextField temp = new JTextField();
+            component.add(temp);
+        });
 
-        // 创建appID、securityKey文本框
-        this.something = new JTextField();
-        something.setText("soemthing test");
-        component.add(something);
     }
 
 
@@ -49,7 +49,9 @@ public class SlowToolKitSetting implements Configurable {
 
     // 点击配置页面中的 apply 按钮或者 OK 按钮，会调用该方法，在该方法中保存配置
     @Override
-    public void apply() throws ConfigurationException {
-        VisibleConfig.INSTANCE.getProperties().put("create classes", Boolean.valueOf(something.getText()));
+    public void apply() {
+        Map<String, Boolean> properties = VisibleConfig.getInstance().getProperties();
+
+        properties.put("create classes", Boolean.valueOf(something.getText()));
     }
 }
