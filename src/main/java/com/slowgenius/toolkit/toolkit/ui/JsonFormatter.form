@@ -17,7 +17,12 @@
         <children>
           <component id="32ea1" class="javax.swing.JTextArea" binding="text">
             <constraints/>
-            <properties/>
+            <properties>
+              <lineWrap value="false"/>
+            </properties>
+            <clientProperties>
+              <html.disable class="java.lang.Boolean" value="true"/>
+            </clientProperties>
           </component>
         </children>
       </scrollpane>

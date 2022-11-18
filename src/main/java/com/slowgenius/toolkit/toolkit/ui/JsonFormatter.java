@@ -42,6 +42,8 @@ public class JsonFormatter {
                 }
             }
         });
+        text.setLineWrap(true);
+        text.setWrapStyleWord(true);
         submit.addActionListener(e -> formatAction());
     }
 
