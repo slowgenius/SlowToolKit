@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 插件配置项
@@ -17,7 +18,7 @@ import java.util.Map;
 public class SlowToolKitSetting implements Configurable {
     JComponent component;
 
-    private HashMap<JComponent, String> configInfo;
+    private final HashMap<String, JTextField> configInfo = new HashMap<>();
 
     public SlowToolKitSetting() {
         this.component = new JPanel();
@@ -27,6 +28,7 @@ public class SlowToolKitSetting implements Configurable {
         state.getProperties().forEach((k, v) -> {
             JTextField temp = new JTextField();
             component.add(temp);
+            configInfo.put(k, temp);
         });
 
     }
@@ -50,8 +52,12 @@ public class SlowToolKitSetting implements Configurable {
     // 点击配置页面中的 apply 按钮或者 OK 按钮，会调用该方法，在该方法中保存配置
     @Override
     public void apply() {
-        Map<String, Boolean> properties = VisibleConfig.getInstance().getProperties();
-
-        properties.put("create classes", Boolean.valueOf(something.getText()));
+        Map<String, Boolean> properties = Objects.requireNonNull(VisibleConfig.INSTANCE.getState()).getProperties();
+        properties.forEach((k, v) -> {
+            if (configInfo.get(k) == null) {
+                return;
+            }
+            properties.put(k, Boolean.valueOf(configInfo.get(k).getText()));
+        });
     }
 }
