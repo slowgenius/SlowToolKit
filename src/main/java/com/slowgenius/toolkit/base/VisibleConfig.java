@@ -1,10 +1,13 @@
 package com.slowgenius.toolkit.base;
 
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.ex.ActionUtil;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
+import com.slowgenius.toolkit.autoCreate.CreateClasses;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,14 +37,19 @@ public class VisibleConfig implements PersistentStateComponent<VisibleConfig> {
 
     @Override
     public @Nullable VisibleConfig getState() {
+        if (this.properties.isEmpty()) {
+            CreateClasses action = (CreateClasses) ActionUtil.getAction("CreateClasses");
+            properties.put(action.getActionKey(), true);
+        }
         return this;
     }
 
     @Override
     public void loadState(@NotNull VisibleConfig visibleConfig) {
-        if (visibleConfig.properties == null) {
+        if (visibleConfig.properties == null || visibleConfig.properties.isEmpty()) {
             visibleConfig.properties = new HashMap<>();
-            properties.put("", true);
+            CreateClasses action = (CreateClasses) ActionUtil.getAction("CreateClasses");
+            properties.put(action.getActionKey(), true);
         }
         this.properties = visibleConfig.properties;
     }
