@@ -18,20 +18,30 @@ import java.util.Objects;
 public class SlowToolKitSetting implements Configurable {
     JComponent component;
 
-    private final HashMap<String, JTextField> configInfo = new HashMap<>();
+    private final HashMap<String, JRadioButton> configInfo = new HashMap<>();
 
     public SlowToolKitSetting() {
         this.component = new JPanel();
         this.component.setLayout(new GridLayout(15, 1));
-        VisibleConfig state = VisibleConfig.INSTANCE.getState();
-        assert state != null;
+        VisibleConfig state = VisibleConfig.getInstance();
         state.getProperties().forEach((k, v) -> {
-            JTextField temp = new JTextField();
-            component.add(temp);
-            configInfo.put(k, temp);
+            JPanel jPanel = new JPanel();
+            JLabel jLabel = new JLabel(k + " : ");
+            JRadioButton onButton = new JRadioButton("on");
+            JRadioButton offButton = new JRadioButton("off");
+            jPanel.add(jLabel);
+            jPanel.add(onButton);
+            jPanel.add(offButton);
+            if (state.getProperties().get(k)) {
+                onButton.setSelected(true);
+            } else {
+                offButton.setSelected(true);
+            }
+            component.add(jPanel);
+            configInfo.put(k, onButton);
         });
-
     }
+
 
 
     @Override
@@ -52,12 +62,12 @@ public class SlowToolKitSetting implements Configurable {
     // 点击配置页面中的 apply 按钮或者 OK 按钮，会调用该方法，在该方法中保存配置
     @Override
     public void apply() {
-        Map<String, Boolean> properties = Objects.requireNonNull(VisibleConfig.INSTANCE.getState()).getProperties();
+        Map<String, Boolean> properties = Objects.requireNonNull(VisibleConfig.getInstance().getState()).getProperties();
         properties.forEach((k, v) -> {
             if (configInfo.get(k) == null) {
                 return;
             }
-            properties.put(k, Boolean.valueOf(configInfo.get(k).getText()));
+            properties.put(k, configInfo.get(k).isSelected());
         });
     }
 }

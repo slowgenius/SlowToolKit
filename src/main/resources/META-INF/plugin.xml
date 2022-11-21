@@ -92,6 +92,7 @@
                 instance="com.slowgenius.toolkit.base.SlowToolKitSetting"
                 id="SlowToolKitSetting"
                 displayName="SlowToolKit"/>
+        <applicationService serviceImplementation="com.slowgenius.toolkit.base.VisibleConfig"/>
     </extensions>
 
     <actions>

@@ -3,6 +3,8 @@ package com.slowgenius.toolkit.utils;
 import com.intellij.database.psi.DbTable;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.psi.PsiElement;
 
 import java.util.Arrays;
@@ -32,4 +34,7 @@ public class MyActionUtils {
     }
 
 
+    public static Project getDefaultProject() {
+        return ProjectManager.getInstance().getDefaultProject();
+    }
 }
