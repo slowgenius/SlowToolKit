@@ -25,10 +25,7 @@ public class TranslatorUI {
 
     public TranslatorUI(Project project) {
         this.project = project;
-        ActionListener actionListener = e -> {
-            translateAction();
-        };
-
+        ActionListener actionListener = e -> translateAction();
         text.addKeyListener(new KeyAdapter() {
             //control + enter按下
             @Override
@@ -80,25 +77,15 @@ public class TranslatorUI {
         return main;
     }
 
-    public void setMain(JPanel main) {
-        this.main = main;
-    }
 
     public JTextArea getText() {
         return text;
-    }
-
-    public void setText(JTextArea text) {
-        this.text = text;
     }
 
     public JLabel getTips() {
         return tips;
     }
 
-    public void setTips(JLabel tips) {
-        this.tips = tips;
-    }
 
     public Project getProject() {
         return project;
