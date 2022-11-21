@@ -19,7 +19,7 @@ public class TranslatorUI {
     private JTextArea text;
 
     private JLabel tips;
-    private JComboBox comboBox1;
+    private JComboBox<String> comboBox;
 
     private final Project project;
 
@@ -44,14 +44,14 @@ public class TranslatorUI {
     private void translateAction() {
         String str = getText().getText();
         String language = LanguageData.getLanguage(str);
-        if (language.equals("en") && Objects.requireNonNull(comboBox1.getSelectedItem()).toString().equals("English")) {
-            comboBox1.setSelectedIndex(1);
+        if (language.equals("en") && Objects.requireNonNull(comboBox.getSelectedItem()).toString().equals("English")) {
+            comboBox.setSelectedIndex(1);
         }
-        if (language.equals("zh") && Objects.requireNonNull(comboBox1.getSelectedItem()).toString().equals("中文")) {
-            comboBox1.setSelectedIndex(0);
+        if (language.equals("zh") && Objects.requireNonNull(comboBox.getSelectedItem()).toString().equals("中文")) {
+            comboBox.setSelectedIndex(0);
         }
         String to;
-        switch (comboBox1.getSelectedIndex()) {
+        switch (comboBox.getSelectedIndex()) {
             case 0:
                 to = "en";
                 break;
