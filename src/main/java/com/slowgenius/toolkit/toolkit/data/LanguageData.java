@@ -73,7 +73,7 @@ public class LanguageData {
 
     public static String getLanguage(String name) {
         String appid = "20220624001256138";
-        String salt = "seomthing";
+        String salt = "something";
         String secret = "T8fA8V727LzPcJJaBYix";
         String sign = DigestUtil.md5Hex(appid + name + salt + secret);
         String url = "https://fanyi-api.baidu.com/api/trans/vip/language?q=" + name + "&appid=" + appid + "&salt=" + salt + "&sign=" + sign;
