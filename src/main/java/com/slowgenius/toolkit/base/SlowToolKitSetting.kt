@@ -6,10 +6,7 @@ import com.slowgenius.toolkit.swingUtil.SingleChoiceFrame
 import java.awt.GridLayout
 import java.util.*
 import javax.swing.JComponent
-import javax.swing.JLabel
 import javax.swing.JPanel
-import javax.swing.JRadioButton
-import javax.swing.SingleSelectionModel
 
 /**
  * 插件配置项
@@ -24,7 +21,7 @@ class SlowToolKitSetting : Configurable {
     private val configInfo = HashMap<String, SingleChoiceFrame?>()
 
     init {
-        component.layout = GridLayout(15, 1)
+        component.layout = GridLayout(15, 3)
         val state = instance
         state.properties.forEach { (k: String, v: Boolean?) ->
             val singleChoice = SingleChoiceFrame(k, v)
