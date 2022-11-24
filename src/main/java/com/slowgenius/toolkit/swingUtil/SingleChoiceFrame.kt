@@ -1,5 +1,7 @@
 package com.slowgenius.toolkit.swingUtil
 
+import java.awt.GridLayout
+import java.awt.Label
 import javax.swing.ButtonGroup
 import javax.swing.JLabel
 import javax.swing.JPanel
@@ -19,7 +21,7 @@ class SingleChoiceFrame : JPanel {
     constructor(text: String?, selected: Boolean, button1Name: String?, button2Name: String?) {
         radioButton1 = JRadioButton(button1Name)
         radioButton2 = JRadioButton(button2Name)
-        jLabel = JLabel(text)
+        jLabel = JLabel("$text :", Label.LEFT)
         val group = ButtonGroup()
         group.add(radioButton1)
         group.add(radioButton2)
@@ -29,12 +31,14 @@ class SingleChoiceFrame : JPanel {
         radioButton1.isSelected = selected
         radioButton2.isSelected = !selected
         this.isVisible = true
+        this.layout = GridLayout(1,3)
+
     }
 
     constructor(text: String?, selected: Boolean) {
         radioButton1 = JRadioButton("开启")
         radioButton2 = JRadioButton("关闭")
-        jLabel = JLabel(text)
+        jLabel = JLabel("$text :", Label.LEFT)
         val group = ButtonGroup()
         group.add(radioButton1)
         group.add(radioButton2)
@@ -44,6 +48,7 @@ class SingleChoiceFrame : JPanel {
         radioButton1.isSelected = selected
         radioButton2.isSelected = !selected
         this.isVisible = true
+        this.layout = GridLayout(1,3)
     }
 
     val isSelected: Boolean
