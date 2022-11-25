@@ -21,7 +21,6 @@ class SlowToolKitSetting : Configurable {
     private val configInfo = HashMap<String, SingleChoiceFrame?>()
 
     init {
-        component.layout = GridLayout(15, 3)
         val state = instance
         state.properties.forEach { (k: String, v: Boolean?) ->
             val singleChoice = SingleChoiceFrame(k, v)
