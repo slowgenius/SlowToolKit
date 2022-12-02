@@ -17,7 +17,7 @@ abstract class SlowAbstractAction : AnAction() {
     abstract fun getActionKey(): String
 
     override fun update(event: AnActionEvent) {
-        val enableAndVisible = VisibleConfig.instance.properties[getActionKey()]
+        val enableAndVisible = VisibleConfig.getInstance().properties[getActionKey()]
         if (enableAndVisible != null) {
             event.presentation.isEnabledAndVisible = enableAndVisible
         }

@@ -33,8 +33,7 @@ class VisibleConfig : PersistentStateComponent<VisibleConfig?> {
 
     companion object {
         @JvmStatic
-        val instance: VisibleConfig
-            get() {
+           fun getInstance(): VisibleConfig {
                 val visibleConfig = ApplicationManager.getApplication().getService(VisibleConfig::class.java)
                 if (visibleConfig.properties.isEmpty()) {
                     visibleConfig.init()
@@ -42,5 +41,4 @@ class VisibleConfig : PersistentStateComponent<VisibleConfig?> {
                 return visibleConfig
             }
     }
-
 }

@@ -1,10 +1,7 @@
 package com.slowgenius.toolkit.base
 
 import com.intellij.openapi.options.Configurable
-import com.slowgenius.toolkit.base.VisibleConfig.Companion.instance
 import com.slowgenius.toolkit.swingUtil.SingleChoiceFrame
-import java.awt.GridLayout
-import java.util.*
 import javax.swing.JComponent
 import javax.swing.JPanel
 
@@ -21,7 +18,7 @@ class SlowToolKitSetting : Configurable {
     private val configInfo = HashMap<String, SingleChoiceFrame?>()
 
     init {
-        val state = instance
+        val state = VisibleConfig.getInstance()
         state.properties.forEach { (k: String, v: Boolean?) ->
             val singleChoice = SingleChoiceFrame(k, v)
             component.add(singleChoice)
@@ -43,7 +40,7 @@ class SlowToolKitSetting : Configurable {
 
     // 点击配置页面中的 apply 按钮或者 OK 按钮，会调用该方法，在该方法中保存配置
     override fun apply() {
-        val properties = instance.state.properties
+        val properties = VisibleConfig.getInstance().state.properties
         properties.forEach { (k: String, v: Boolean?) ->
             if (configInfo[k] == null) {
                 return@forEach

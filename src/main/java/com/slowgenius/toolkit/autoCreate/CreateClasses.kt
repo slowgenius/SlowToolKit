@@ -10,15 +10,11 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.InputValidatorEx
 import com.intellij.openapi.util.text.StringUtil
 import com.intellij.psi.JavaDirectoryService
-import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiElement
 import com.intellij.util.PlatformIcons
 import com.slowgenius.toolkit.base.SlowAbstractAction
 import java.util.*
-import java.util.function.Consumer
-import java.util.function.Function
-import java.util.stream.Collector
 import java.util.stream.Collectors
 
 /**
@@ -26,7 +22,7 @@ import java.util.stream.Collectors
  * @version SlowToolkit
  * @since 2022/6/29 20:50:08
  */
-open class CreateClasses : SlowAbstractAction() {
+class CreateClasses : SlowAbstractAction() {
     override fun actionPerformed(anActionEvent: AnActionEvent) {
         val project = anActionEvent.project!!
         val dataContext = anActionEvent.dataContext

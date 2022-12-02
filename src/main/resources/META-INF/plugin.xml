@@ -121,5 +121,10 @@
             <!--生成代码菜单-->
             <add-to-group group-id="DatabaseViewPopupMenu" anchor="first"/>
         </action>
+        <action id="com.slowgenius.toolkit.test.ToggleTestAction" class="com.slowgenius.toolkit.test.ToggleTestAction"
+                text="TestAction">
+            <add-to-group group-id="Diff.EditorPopupMenu"/>
+            <add-to-group group-id="Diff.EditorGutterPopupMenu" anchor="first"/>
+        </action>
     </actions>
 </idea-plugin>
