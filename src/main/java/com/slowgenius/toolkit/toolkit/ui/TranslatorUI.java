@@ -30,6 +30,7 @@ public class TranslatorUI {
             //control + enter按下
             @Override
             public void keyTyped(KeyEvent e) {
+                //mac上是option + enter。。。。
                 if (e.isAltDown() && e.getKeyChar() == '\r') {
                     translateAction();
                 }
@@ -50,21 +51,27 @@ public class TranslatorUI {
         String to;
         switch (comboBox.getSelectedIndex()) {
             case 0:
+                //英语
                 to = "en";
                 break;
             case 1:
+                //中文
                 to = "zh";
                 break;
             case 2:
+                //粤语
                 to = "yue";
                 break;
             case 3:
+                //文言文
                 to = "wyw";
                 break;
             case 4:
+                //繁体中文
                 to = "cht";
                 break;
             case 5:
+                //日语
                 to = "jp";
                 break;
             default:

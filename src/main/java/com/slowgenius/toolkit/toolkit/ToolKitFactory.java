@@ -28,5 +28,8 @@ public class ToolKitFactory implements ToolWindowFactory {
         toolWindow.getContentManager().addContent(translator);
         Content jsonFormatter = contentFactory.createContent(new JsonFormatter(project).getMain(), "Json格式化", true);
         toolWindow.getContentManager().addContent(jsonFormatter);
+        //时间戳转换
+
+        //
     }
 }
