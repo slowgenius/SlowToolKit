@@ -27,7 +27,10 @@
         <children>
           <component id="2810f" class="javax.swing.JTextArea" binding="text">
             <constraints/>
-            <properties/>
+            <properties>
+              <lineWrap value="true"/>
+              <wrapStyleWord value="true"/>
+            </properties>
           </component>
         </children>
       </scrollpane>
@@ -42,6 +45,7 @@
             <constraints/>
             <properties>
               <editable value="false"/>
+              <enabled value="true"/>
             </properties>
           </component>
         </children>

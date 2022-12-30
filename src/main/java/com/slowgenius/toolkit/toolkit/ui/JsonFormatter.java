@@ -21,7 +21,7 @@ import java.awt.event.KeyEvent;
 public class JsonFormatter {
 
     private JPanel main;
-    private JTextPane result;
+    private JTextArea result;
     private JButton submit;
     private JTextArea text;
 
@@ -65,11 +65,11 @@ public class JsonFormatter {
         this.main = main;
     }
 
-    public JTextPane getResult() {
+    public JTextArea getResult() {
         return result;
     }
 
-    public void setResult(JTextPane result) {
+    public void setResult(JTextArea result) {
         this.result = result;
     }
 
