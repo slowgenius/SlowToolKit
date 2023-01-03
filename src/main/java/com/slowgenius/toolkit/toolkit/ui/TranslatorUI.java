@@ -14,12 +14,13 @@ import java.util.Objects;
 public class TranslatorUI {
 
     private JPanel main;
-    private JTextPane result;
+    private JTextArea result;
     private JButton submit;
     private JTextArea text;
 
     private JLabel tips;
     private JComboBox<String> comboBox;
+    private JTextArea textArea1;
 
     private final Project project;
 

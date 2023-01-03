@@ -6,6 +6,7 @@ import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.slowgenius.toolkit.toolkit.ui.JsonFormatter;
+import com.slowgenius.toolkit.toolkit.ui.TimeUtil;
 import com.slowgenius.toolkit.toolkit.ui.TranslatorUI;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,7 +30,8 @@ public class ToolKitFactory implements ToolWindowFactory {
         Content jsonFormatter = contentFactory.createContent(new JsonFormatter(project).getMain(), "Json格式化", true);
         toolWindow.getContentManager().addContent(jsonFormatter);
         //时间戳转换
-
+        Content timeUtil = contentFactory.createContent(new TimeUtil(project).getMain(), "时间转换工具", true);
+        toolWindow.getContentManager().addContent(timeUtil);
         //
     }
 }
