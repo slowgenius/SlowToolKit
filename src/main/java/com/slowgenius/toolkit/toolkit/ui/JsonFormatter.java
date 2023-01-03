@@ -53,7 +53,7 @@ public class JsonFormatter {
             Notifications.Bus.notify(new Notification("Print", "Json格式化失败", "invalid json" + System.currentTimeMillis(), NotificationType.INFORMATION), project);
         }
         JSONObject unFormatJsonObject = JSONObject.parseObject(unFormatJson);
-        String resultJson = JSON.toJSONString(unFormatJsonObject, SerializerFeature.PrettyFormat);
+        String resultJson = JSON.toJSONString(unFormatJsonObject, SerializerFeature.PrettyFormat).replace("\t", "    ");
         result.setText(resultJson);
     }
 
