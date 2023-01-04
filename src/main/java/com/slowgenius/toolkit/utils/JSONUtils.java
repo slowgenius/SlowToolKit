@@ -10,8 +10,8 @@ import com.alibaba.fastjson.JSONPath;
  */
 public class JSONUtils {
 
-    public static <T> T read(String json, String path, Class<T> clazz) {
-        return JSONPath.read(json, path, clazz);
+    public static Object read(String json, String path) {
+        return JSONPath.read(json, path);
     }
 
 }

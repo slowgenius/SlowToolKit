@@ -7,8 +7,12 @@ import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.project.Project;
+import com.slowgenius.toolkit.utils.JSONUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -22,29 +26,26 @@ public class JsonFormatter {
 
     private JPanel main;
     private JTextArea result;
-    private JButton submit;
     private JTextArea text;
-
-    private JLabel tips;
-    private JComboBox<String> checkBox;
-
+    private JTextField jsonPath;
+    private JButton submit;
     private final Project project;
 
 
     public JsonFormatter(Project project) {
         this.project = project;
         text.addKeyListener(new KeyAdapter() {
-            //control + enter按下
+            //option + enter按下
             @Override
-            public void keyTyped(KeyEvent e) {
-                if (e.isAltDown() && e.getKeyChar() == '\r') {
+            public void keyPressed(KeyEvent e) {
+                if (e.isAltDown() && e.getKeyCode() == KeyEvent.VK_ENTER) {
                     formatAction();
                 }
             }
         });
         text.setLineWrap(true);
         text.setWrapStyleWord(true);
-        submit.addActionListener(e -> formatAction());
+        submit.addActionListener(action -> formatAction());
     }
 
     public void formatAction() {
@@ -52,7 +53,12 @@ public class JsonFormatter {
         if (!JSONObject.isValid(unFormatJson)) {
             Notifications.Bus.notify(new Notification("Print", "Json格式化失败", "invalid json" + System.currentTimeMillis(), NotificationType.INFORMATION), project);
         }
-        JSONObject unFormatJsonObject = JSONObject.parseObject(unFormatJson);
+        Object unFormatJsonObject;
+        if (StringUtils.isNotBlank(jsonPath.getText())) {
+            unFormatJsonObject = JSONUtils.read(unFormatJson, jsonPath.getText());
+        } else {
+            unFormatJsonObject = JSONObject.parseObject(unFormatJson);
+        }
         String resultJson = JSON.toJSONString(unFormatJsonObject, SerializerFeature.PrettyFormat).replace("\t", "    ");
         result.setText(resultJson);
     }
@@ -61,49 +67,6 @@ public class JsonFormatter {
         return main;
     }
 
-    public void setMain(JPanel main) {
-        this.main = main;
-    }
-
-    public JTextArea getResult() {
-        return result;
-    }
-
-    public void setResult(JTextArea result) {
-        this.result = result;
-    }
-
-    public JButton getSubmit() {
-        return submit;
-    }
-
-    public void setSubmit(JButton submit) {
-        this.submit = submit;
-    }
-
-    public JTextArea getText() {
-        return text;
-    }
-
-    public void setText(JTextArea text) {
-        this.text = text;
-    }
-
-    public JLabel getTips() {
-        return tips;
-    }
-
-    public void setTips(JLabel tips) {
-        this.tips = tips;
-    }
-
-    public JComboBox getCheckBox() {
-        return checkBox;
-    }
-
-    public void setCheckBox(JComboBox checkBox) {
-        this.checkBox = checkBox;
-    }
 
     public Project getProject() {
         return project;
