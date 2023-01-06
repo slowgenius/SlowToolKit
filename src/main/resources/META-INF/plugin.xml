@@ -34,6 +34,8 @@
 
     <change-notes>
         <![CDATA[
+      <h3>2.8.1</h3>
+      <p> 1.Json Formatter add support for json arrays </p>
       <h3>2.8.0</h3>
       <p> 1.add jsonPath to Json Formatter</p>
       <h3>2.7.0</h3>
