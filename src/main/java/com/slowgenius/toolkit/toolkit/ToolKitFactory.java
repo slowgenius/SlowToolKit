@@ -1,5 +1,6 @@
 package com.slowgenius.toolkit.toolkit;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
@@ -22,7 +23,7 @@ public class ToolKitFactory implements ToolWindowFactory {
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
         // 获取内容工厂的实例
-        ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
+        ContentFactory contentFactory = ApplicationManager.getApplication().getService(ContentFactory.class);
         // 获取 ToolWindow 显示的内容
         Content translator = contentFactory.createContent(new TranslatorUI(project).getMain(), "多语互译", true);
         // 设置 ToolWindow 显示的内容
