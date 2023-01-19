@@ -8,7 +8,7 @@ import javax.swing.*;
  * @since 2023/1/18 18:31:23
  */
 
-public class InputForm {
+public class InputForm extends JPanel {
 
     private JLabel label;
     private JPanel main;

@@ -1,8 +1,6 @@
 package com.slowgenius.toolkit.toolkit.ui;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.ui.JBColor;
-import com.slowgenius.toolkit.swingUtil.InputForm;
 import com.slowgenius.toolkit.utils.TransCodeUtil;
 
 import javax.swing.*;
@@ -21,45 +19,19 @@ public class Transcoder {
 
     public final Project project;
     private JPanel main;
-    private JPanel md5;
+    private JPanel operate;
     private JToolBar toolbar;
+    private JButton transform;
+    private JTextArea input;
+    private JTextArea output;
 
     private Model model;
 
-    private JPanel input;
-
-
     public Transcoder(Project project) {
         this.project = project;
-    }
-
-
-    public JPanel getMain() {
-        return this.main;
-    }
-
-    private void createUIComponents() {
-        md5 = new JPanel();
-        md5.setBackground(JBColor.CYAN);
-
-        Dimension parentSize = md5.getSize();
-        InputForm inputForm = new InputForm("输入");
-        input = inputForm.getMain();
-        input.setSize(new Dimension(Double.valueOf(parentSize.getWidth()).intValue() / 2 - 100, Double.valueOf(parentSize.getHeight()).intValue()));
-        input.setAlignmentY(1000);
-        md5.add(input);
-
-        Button transform = new Button();
-        md5.add(transform);
-
-        InputForm outputInform = new InputForm("输出");
-        JPanel output = outputInform.getMain();
-        outputInform.getText().setSize(new Dimension(Double.valueOf(parentSize.getWidth()).intValue() / 2 - 100, Double.valueOf(parentSize.getHeight()).intValue()));
-        md5.add(output);
-
 
         transform.addActionListener(action -> {
-            String text = inputForm.getText().getText();
+            String text = input.getText();
             String result = "";
             if (model == Model.MD5) {
                 result = TransCodeUtil.md5(text);
@@ -70,8 +42,16 @@ public class Transcoder {
             if (model == Model.BASE64) {
                 result = new String(Base64.getDecoder().decode(text));
             }
-            outputInform.setText(result);
+            output.setText(result);
         });
+    }
+
+
+    public JPanel getMain() {
+        return this.main;
+    }
+
+    private void createUIComponents() {
 
         toolbar = new JToolBar();
         //md5编码监听事件
