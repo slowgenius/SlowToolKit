@@ -36,7 +36,7 @@ public class ToolKitFactory implements ToolWindowFactory {
         Content timeUtil = contentFactory.createContent(new TimeUtil(project).getMain(), "时间转换工具", true);
         toolWindow.getContentManager().addContent(timeUtil);
         //编码转换器
-        Content transcoder = contentFactory.createContent(new Transcoder(project).getMain(), "编码转换器", true);
+        Content transcoder = contentFactory.createContent(new Transcoder().getMain(), "编码转换器", true);
         toolWindow.getContentManager().addContent(transcoder);
         //正则表达式
         Content regularExpression = contentFactory.createContent(new RegularExpression(project).getMain(), "正则匹配", true);

@@ -34,8 +34,41 @@ public class TransCodeUtil {
         return md5(str, "");
     }
 
-    public static String md5UpperCase(String str, String salt) {
-        return md5(str, salt).toUpperCase();
+    public static String md5UpperCase(String str) {
+        return md5(str).toUpperCase();
+    }
+
+
+    public static String unicodeToString(String str) {
+        int start = 0;
+        int end = 0;
+        StringBuilder buffer = new StringBuilder();
+        while (start > -1) {
+            end = str.indexOf("\\u", start + 2);
+            String charStr = "";
+            if (end == -1) {
+                charStr = str.substring(start + 2, str.length());
+            } else {
+                charStr = str.substring(start + 2, end);
+            }
+            char letter = (char) Integer.parseInt(charStr, 16); // 16进制parse整形字符串。
+            buffer.append(Character.toString(letter));
+            start = end;
+        }
+        return buffer.toString();
+    }
+
+    public static String stringToUnicode(String str) {
+        char[] utfBytes = str.toCharArray();
+        StringBuilder unicodeBytes = new StringBuilder();
+        for (char utfByte : utfBytes) {
+            String hexB = Integer.toHexString(utfByte);
+            if (hexB.length() <= 2) {
+                hexB = "00" + hexB;
+            }
+            unicodeBytes.append("\\u").append(hexB);
+        }
+        return unicodeBytes.toString();
     }
 
 
