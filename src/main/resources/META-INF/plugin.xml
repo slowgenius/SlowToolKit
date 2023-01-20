@@ -34,6 +34,9 @@
 
     <change-notes>
         <![CDATA[
+      <h3>2.9.0</h3>
+      <p> 1. Decoder and encoder tool in Toolkit</p>
+      <p> 2. Regular expression tool in Toolkit</p>
       <h3>2.8.1</h3>
       <p> 1.Json Formatter add support for json arrays </p>
       <h3>2.8.0</h3>
