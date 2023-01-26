@@ -12,10 +12,11 @@ repositories {
 }
 
 dependencies {
-    implementation("cn.hutool:hutool-all:5.8.9")
+    implementation("cn.hutool:hutool-all:5.8.11")
     implementation("com.alibaba:fastjson:2.0.19")
     implementation("org.freemarker:freemarker:2.3.31")
     implementation("org.reflections:reflections:0.10.2")
+    implementation("com.squareup.okhttp3:okhttp:3.14.6")
 }
 
 

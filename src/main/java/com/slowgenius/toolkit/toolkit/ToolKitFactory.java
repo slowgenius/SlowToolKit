@@ -6,6 +6,7 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
+import com.slowgenius.toolkit.toolkit.ui.EasyRequest;
 import com.slowgenius.toolkit.toolkit.ui.JsonFormatter;
 import com.slowgenius.toolkit.toolkit.ui.RegularExpression;
 import com.slowgenius.toolkit.toolkit.ui.TimeUtil;
@@ -41,5 +42,8 @@ public class ToolKitFactory implements ToolWindowFactory {
         //正则表达式
         Content regularExpression = contentFactory.createContent(new RegularExpression(project).getMain(), "正则匹配", true);
         toolWindow.getContentManager().addContent(regularExpression);
+        //简易请求
+        Content easyRequest = contentFactory.createContent(new EasyRequest().getMain(), "Easy Request", true);
+        toolWindow.getContentManager().addContent(easyRequest);
     }
 }
