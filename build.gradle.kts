@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.slowgenius"
-version = "2.9.0"
+version = "3.0.0"
 
 repositories {
     mavenCentral()
