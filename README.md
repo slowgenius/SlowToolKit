@@ -31,3 +31,6 @@
 1. jsonPath转换
 2. 时间戳转换
 3. 编码转换
+4. jsonFormatter树形结构
+5. 自定义组建
+6. 通过json生成实体类
