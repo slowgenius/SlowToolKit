@@ -12,6 +12,8 @@ import com.slowgenius.toolkit.utils.JSONUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
+import javax.swing.event.TreeExpansionEvent;
+import javax.swing.event.TreeExpansionListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.SimpleAttributeSet;
@@ -21,11 +23,14 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -50,11 +55,31 @@ public class JsonFormatter {
 
     public JsonFormatter(Project project) {
         this.project = project;
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode();
-
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode(new DecoratedText("object"));
         DefaultTreeModel newModel = new DefaultTreeModel(root);
         jsonTree.setModel(newModel);
         jsonTree.setCellRenderer(new TextPaneDefaultTreeCellRenderer());
+        jsonTree.addTreeExpansionListener(new TreeExpansionListener() {
+            @Override
+            public void treeExpanded(TreeExpansionEvent event) {
+                DefaultMutableTreeNode item = (DefaultMutableTreeNode) event.getPath().getLastPathComponent();
+                List<DecoratedText> userObject = (List<DecoratedText>) item.getUserObject();
+                userObject.get(1).setText(userObject.get(1).getText().replace("{...}", "{"));
+                DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) event.getPath().getParentPath().getLastPathComponent();
+                parentNode.insert(new DefaultMutableTreeNode(new DecoratedText("}")), parentNode.getIndex(item) + 1);
+                SwingUtilities.invokeLater(() -> jsonTree.updateUI());
+            }
+
+            @Override
+            public void treeCollapsed(TreeExpansionEvent event) {
+                DefaultMutableTreeNode item = (DefaultMutableTreeNode) event.getPath().getLastPathComponent();
+                List<DecoratedText> userObject = (List<DecoratedText>) item.getUserObject();
+                userObject.get(1).setText(userObject.get(1).getText().replace("{", "{...}"));
+                DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) event.getPath().getParentPath().getLastPathComponent();
+                parentNode.remove(parentNode.getIndex(item) + 1);
+                SwingUtilities.invokeLater(() -> jsonTree.updateUI());
+            }
+        });
         text.addKeyListener(new KeyAdapter() {
             //option + enter按下
             @Override
@@ -70,19 +95,30 @@ public class JsonFormatter {
         main.addComponentListener(new ComponentAdapter() {
             /**
              * Invoked when the component's size changes.
-             *
-             * @param e
              */
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
                 Dimension mainSize = main.getSize();
-                inputs.setMinimumSize(new Dimension(Double.valueOf(mainSize.getWidth() - 150).intValue() / 2, -1));
-                inputs.setMaximumSize(new Dimension(Double.valueOf(mainSize.getWidth() - 150).intValue() / 2, -1));
-                tabPanel.setMinimumSize(new Dimension(Double.valueOf(mainSize.getWidth() - 150).intValue() / 2, -1));
-                tabPanel.setMaximumSize(new Dimension(Double.valueOf(mainSize.getWidth() - 150).intValue() / 2, -1));
+                inputs.setMinimumSize(new Dimension(Double.valueOf(mainSize.getWidth() - 150).intValue() / 11 * 5, -1));
+                inputs.setMaximumSize(new Dimension(Double.valueOf(mainSize.getWidth() - 150).intValue() / 11 * 5, -1));
+                tabPanel.setMinimumSize(new Dimension(Double.valueOf(mainSize.getWidth() - 150).intValue() / 11 * 6, -1));
+                tabPanel.setMaximumSize(new Dimension(Double.valueOf(mainSize.getWidth() - 150).intValue() / 11 * 6, -1));
             }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+                super.componentShown(e);
+                Dimension mainSize = main.getSize();
+                inputs.setMinimumSize(new Dimension(Double.valueOf(mainSize.getWidth() - 150).intValue() / 11 * 5, -1));
+                inputs.setMaximumSize(new Dimension(Double.valueOf(mainSize.getWidth() - 150).intValue() / 11 * 5, -1));
+                tabPanel.setMinimumSize(new Dimension(Double.valueOf(mainSize.getWidth() - 150).intValue() / 11 * 6, -1));
+                tabPanel.setMaximumSize(new Dimension(Double.valueOf(mainSize.getWidth() - 150).intValue() / 11 * 6, -1));
+            }
+
         });
+
+
     }
 
     public void formatAction() {
@@ -98,10 +134,14 @@ public class JsonFormatter {
             if (unFormatJson.startsWith("{")) {
                 unFormatJsonObject = JSONObject.parseObject(unFormatJson);
                 JSONObject jsonObject = (JSONObject) unFormatJsonObject;
-                DefaultMutableTreeNode defaultMutableTreeNode = new DefaultMutableTreeNode("object");
-                TreeModel rootModel = new DefaultTreeModel(defaultMutableTreeNode);
-                buildTree(jsonObject, defaultMutableTreeNode);
+                DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(new DecoratedText("object"));
+                DefaultMutableTreeNode dataRoot = new DefaultMutableTreeNode(List.of(new DecoratedText("object", JBColor.GREEN), new DecoratedText(": {")));
+                rootNode.add(dataRoot);
+                buildTree(jsonObject, dataRoot);
+                TreeModel rootModel = new DefaultTreeModel(rootNode);
                 jsonTree.setModel(rootModel);
+                jsonTree.setRootVisible(false);
+                jsonTree.expandPath(new TreePath(dataRoot.getPath()));
                 jsonObject.values().forEach(item -> {
                     System.out.println(1111);
                 });
@@ -117,23 +157,28 @@ public class JsonFormatter {
 
 
     private DefaultMutableTreeNode buildTree(JSONObject jsonObject, DefaultMutableTreeNode root) {
-        jsonObject.keySet().forEach(item -> {
+        List<String> strings = new ArrayList<>(jsonObject.keySet());
+        strings.forEach(item -> {
             if (jsonObject.get(item).getClass().getName().contains("JSONObject")) {
-                DefaultMutableTreeNode newChild = buildTree((JSONObject) jsonObject.get(item), new DefaultMutableTreeNode("\"" + item + "\":"));
+                DefaultMutableTreeNode tempRoot = new DefaultMutableTreeNode(List.of(new DecoratedText("\"" + item + "\"", JBColor.GREEN), new DecoratedText(": {...}")));
+                DefaultMutableTreeNode newChild = buildTree((JSONObject) jsonObject.get(item), tempRoot);
                 root.add(newChild);
             } else {
-                DecoratedText[] arrayColorText;
+                List<DecoratedText> arrayColorText = new ArrayList<>();
                 if (jsonObject.get(item).getClass().getName().contains("String")) {
-                    arrayColorText = new DecoratedText[]{
-                            new DecoratedText(null, "\"" + item + "\"", JBColor.PINK),
-                            new DecoratedText(null, ": ", JBColor.GRAY),
-                            new DecoratedText(null, "\"" + jsonObject.get(item).toString() + "\"", JBColor.BLUE)
-                    };
+                    arrayColorText.add(new DecoratedText("\"" + item + "\"", JBColor.ORANGE));
+                    arrayColorText.add(new DecoratedText(": ", JBColor.GRAY));
+                    arrayColorText.add(new DecoratedText("\"" + jsonObject.get(item).toString() + "\"", JBColor.BLUE));
+                    if (!strings.get(strings.size() - 1).equals(item)) {
+                        arrayColorText.add(new DecoratedText(","));
+                    }
                 } else {
-                    arrayColorText = new DecoratedText[]{
-                            new DecoratedText(null, "\"" + item + "\"", JBColor.PINK),
-                            new DecoratedText(null, ": ", JBColor.GRAY),
-                            new DecoratedText(null, jsonObject.get(item).toString(), JBColor.GREEN)};
+                    arrayColorText.add(new DecoratedText("\"" + item + "\"", JBColor.ORANGE));
+                    arrayColorText.add(new DecoratedText(": ", JBColor.GRAY));
+                    arrayColorText.add(new DecoratedText(jsonObject.get(item).toString(), JBColor.PINK));
+                    if (!strings.get(strings.size() - 1).equals(item)) {
+                        arrayColorText.add(new DecoratedText(","));
+                    }
                 }
                 root.add(new DefaultMutableTreeNode(arrayColorText));
             }
@@ -150,12 +195,6 @@ public class JsonFormatter {
     public Project getProject() {
         return project;
     }
-
-//    private void createUIComponents() {
-//        // TODO: place custom component creation code here
-//        inputs = new JPanel();
-//        results = new JPanel();
-//    }
 
 }
 
@@ -252,23 +291,28 @@ class TextPaneDefaultTreeCellRenderer extends DefaultTreeCellRenderer {
     TextPaneScrollPane textPaneScrollPane = new TextPaneScrollPane();
 
     public TextPaneDefaultTreeCellRenderer() {
-        textPaneScrollPane.setBackgroundNonSelectionColor(getBackgroundNonSelectionColor());
-        textPaneScrollPane.setBackgroundSelectionColor(getBackgroundSelectionColor());
+//        textPaneScrollPane.setBackgroundNonSelectionColor(getBackgroundNonSelectionColor());
+//        textPaneScrollPane.setBackgroundSelectionColor(getBackgroundSelectionColor());
         textPaneScrollPane.setTextNonSelectionColor(getTextNonSelectionColor());
         textPaneScrollPane.setTextSelectionColor(getTextSelectionColor());
+    }
+
+    @Override
+    public void updateUI() {
+        super.updateUI();
     }
 
     @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value,
                                                   boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
         setIcon(null);
-        if (leaf) {
-            return textPaneScrollPane.getTreeCellRendererComponent(tree, value,
-                    selected, expanded, leaf, row, hasFocus);
-        } else {
-            return super.getTreeCellRendererComponent(tree, value, selected,
-                    expanded, leaf, row, hasFocus);
-        }
+//        if (leaf) {
+        return textPaneScrollPane.getTreeCellRendererComponent(tree, value,
+                selected, expanded, leaf, row, hasFocus);
+//        } else {
+//            return super.getTreeCellRendererComponent(tree, value, selected,
+//                    expanded, leaf, row, hasFocus);
+//        }
     }
 }
 
@@ -317,7 +361,7 @@ class TextPaneScrollPane extends JScrollPane implements TreeCellRenderer {
 
         DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
         Object object = node.getUserObject();
-        if (object != null && object instanceof DecoratedText) {
+        if (object instanceof DecoratedText) {
             textPane.setText("");
             Document doc = textPane.getStyledDocument();
             DecoratedText decText = (DecoratedText) object;
@@ -326,10 +370,10 @@ class TextPaneScrollPane extends JScrollPane implements TreeCellRenderer {
             } catch (BadLocationException ex) {
                 Logger.getLogger(TextPaneScrollPane.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } else if (object != null && object instanceof DecoratedText[]) {
+        } else if (object instanceof List) {
             textPane.setText("");
             Document doc = textPane.getStyledDocument();
-            DecoratedText[] arrayDecText = (DecoratedText[]) object;
+            List<DecoratedText> arrayDecText = (List<DecoratedText>) object;
             for (DecoratedText decText : arrayDecText) {
                 try {
                     doc.insertString(doc.getLength(), decText.getText(), getAttributeSet(decText));
