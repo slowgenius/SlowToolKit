@@ -1,6 +1,7 @@
 package com.slowgenius.toolkit.toolkit.ui;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.intellij.notification.Notification;
@@ -159,26 +160,37 @@ public class JsonFormatter {
     private DefaultMutableTreeNode buildTree(JSONObject jsonObject, DefaultMutableTreeNode root) {
         List<String> strings = new ArrayList<>(jsonObject.keySet());
         strings.forEach(item -> {
+            //如果是对象的话创建一个key: {...} 这样的效果
             if (jsonObject.get(item).getClass().getName().contains("JSONObject")) {
                 DefaultMutableTreeNode tempRoot = new DefaultMutableTreeNode(List.of(new DecoratedText("\"" + item + "\"", JBColor.GREEN), new DecoratedText(": {...}")));
                 DefaultMutableTreeNode newChild = buildTree((JSONObject) jsonObject.get(item), tempRoot);
                 root.add(newChild);
+            } else if (jsonObject.get(item).getClass().getName().contains("JSONArray")) {
+                //如果是一个数组的话就制造一个 key: [index] 这样的效果
+                JSONArray array = (JSONArray) jsonObject.get(item);
+                DefaultMutableTreeNode tempRoot = new DefaultMutableTreeNode(List.of(new DecoratedText("\"" + item + "\"", JBColor.GREEN), new DecoratedText(String.format(": [%s]", array.size()))));
+                if (array.isEmpty()) {
+
+                }
+                for (int i = 0; i < array.size(); i++) {
+                    if (array.get(0).getClass().getName().contains("JSONObject")) {
+                        //如果是对象数组
+                        DefaultMutableTreeNode arrayTempRoot = new DefaultMutableTreeNode(List.of(new DecoratedText(String.format("\"[%s]\"", i), JBColor.GREEN), new DecoratedText("\"" + item + "\"", JBColor.GREEN), new DecoratedText(": {...}")));
+                        buildTree((JSONObject) array.get(i), arrayTempRoot);
+                        tempRoot.add(arrayTempRoot);
+                    } else {
+                        List<DecoratedText> arrayColorText = getStringTextList(String.format("[%s]", i), jsonObject.get(item));
+                        if (!strings.get(strings.size() - 1).equals(item)) {
+                            arrayColorText.add(new DecoratedText(","));
+                        }
+                        root.add(new DefaultMutableTreeNode(arrayColorText));
+                    }
+                }
+                root.add(tempRoot);
             } else {
-                List<DecoratedText> arrayColorText = new ArrayList<>();
-                if (jsonObject.get(item).getClass().getName().contains("String")) {
-                    arrayColorText.add(new DecoratedText("\"" + item + "\"", JBColor.ORANGE));
-                    arrayColorText.add(new DecoratedText(": ", JBColor.GRAY));
-                    arrayColorText.add(new DecoratedText("\"" + jsonObject.get(item).toString() + "\"", JBColor.BLUE));
-                    if (!strings.get(strings.size() - 1).equals(item)) {
-                        arrayColorText.add(new DecoratedText(","));
-                    }
-                } else {
-                    arrayColorText.add(new DecoratedText("\"" + item + "\"", JBColor.ORANGE));
-                    arrayColorText.add(new DecoratedText(": ", JBColor.GRAY));
-                    arrayColorText.add(new DecoratedText(jsonObject.get(item).toString(), JBColor.PINK));
-                    if (!strings.get(strings.size() - 1).equals(item)) {
-                        arrayColorText.add(new DecoratedText(","));
-                    }
+                List<DecoratedText> arrayColorText = getStringTextList(String.format("\"%s\"", item), jsonObject.get(item));
+                if (!strings.get(strings.size() - 1).equals(item)) {
+                    arrayColorText.add(new DecoratedText(","));
                 }
                 root.add(new DefaultMutableTreeNode(arrayColorText));
             }
@@ -186,6 +198,20 @@ public class JsonFormatter {
         return root;
     }
 
+
+    private List<DecoratedText> getStringTextList(String key, Object value) {
+        List<DecoratedText> arrayColorText = new ArrayList<>();
+        if (value.getClass().getName().contains("String")) {
+            arrayColorText.add(new DecoratedText(key, JBColor.ORANGE));
+            arrayColorText.add(new DecoratedText(": ", JBColor.GRAY));
+            arrayColorText.add(new DecoratedText("\"" + value + "\"", JBColor.BLUE));
+        } else {
+            arrayColorText.add(new DecoratedText(key, JBColor.ORANGE));
+            arrayColorText.add(new DecoratedText(": ", JBColor.GRAY));
+            arrayColorText.add(new DecoratedText(value.toString(), JBColor.PINK));
+        }
+        return arrayColorText;
+    }
 
     public JPanel getMain() {
         return main;
