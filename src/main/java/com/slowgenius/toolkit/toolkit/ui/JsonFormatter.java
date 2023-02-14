@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import javax.swing.*;
 import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeExpansionListener;
+import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.SimpleAttributeSet;
@@ -59,15 +60,39 @@ public class JsonFormatter {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode(new DecoratedText("object"));
         DefaultTreeModel newModel = new DefaultTreeModel(root);
         jsonTree.setModel(newModel);
-        jsonTree.setCellRenderer(new TextPaneDefaultTreeCellRenderer());
+        TextPaneDefaultTreeCellRenderer renderer = new TextPaneDefaultTreeCellRenderer();
+        renderer.setIcon(null);
+        renderer.setClosedIcon(null);
+        renderer.setOpenIcon(null);
+        renderer.setLeafIcon(null);
+        jsonTree.setCellRenderer(renderer);
+        jsonTree.setUI(new BasicTreeUI() {
+            @Override
+            public Icon getCollapsedIcon() {
+                return null;
+            }
+
+            @Override
+            public Icon getExpandedIcon() {
+                return null;
+            }
+        });
         jsonTree.addTreeExpansionListener(new TreeExpansionListener() {
             @Override
             public void treeExpanded(TreeExpansionEvent event) {
                 DefaultMutableTreeNode item = (DefaultMutableTreeNode) event.getPath().getLastPathComponent();
-                List<DecoratedText> userObject = (List<DecoratedText>) item.getUserObject();
-                userObject.get(1).setText(userObject.get(1).getText().replace("{...}", "{"));
+
                 DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) event.getPath().getParentPath().getLastPathComponent();
-                parentNode.insert(new DefaultMutableTreeNode(new DecoratedText("}")), parentNode.getIndex(item) + 1);
+                List<DecoratedText> userObject = (List<DecoratedText>) item.getUserObject();
+                //如果是json对象，后边加括号 }  如果是json数组后面加 ]
+                if (userObject.get(1).getText().contains("{...}")) {
+                    userObject.get(1).setText(userObject.get(1).getText().replace("{...}", "{"));
+                    parentNode.insert(new DefaultMutableTreeNode(new DecoratedText("}")), parentNode.getIndex(item) + 1);
+                } else {
+                    userObject.get(1).setText(userObject.get(1).getText().replaceAll("\\w*]", ""));
+                    parentNode.insert(new DefaultMutableTreeNode(new DecoratedText("]")), parentNode.getIndex(item) + 1);
+                }
+                //刷新UI
                 SwingUtilities.invokeLater(() -> jsonTree.updateUI());
             }
 
@@ -76,6 +101,7 @@ public class JsonFormatter {
                 DefaultMutableTreeNode item = (DefaultMutableTreeNode) event.getPath().getLastPathComponent();
                 List<DecoratedText> userObject = (List<DecoratedText>) item.getUserObject();
                 userObject.get(1).setText(userObject.get(1).getText().replace("{", "{...}"));
+                userObject.get(1).setText(userObject.get(1).getText().replace("[", String.format("[%s]", item.getParent().getChildCount() - 1)));
                 DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) event.getPath().getParentPath().getLastPathComponent();
                 parentNode.remove(parentNode.getIndex(item) + 1);
                 SwingUtilities.invokeLater(() -> jsonTree.updateUI());
@@ -118,9 +144,8 @@ public class JsonFormatter {
             }
 
         });
-
-
     }
+
 
     public void formatAction() {
         String unFormatJson = text.getText();
@@ -174,8 +199,8 @@ public class JsonFormatter {
                 }
                 for (int i = 0; i < array.size(); i++) {
                     if (array.get(0).getClass().getName().contains("JSONObject")) {
-                        //如果是对象数组
-                        DefaultMutableTreeNode arrayTempRoot = new DefaultMutableTreeNode(List.of(new DecoratedText(String.format("\"[%s]\"", i), JBColor.GREEN), new DecoratedText("\"" + item + "\"", JBColor.GREEN), new DecoratedText(": {...}")));
+                        // [0]:{...}
+                        DefaultMutableTreeNode arrayTempRoot = new DefaultMutableTreeNode(List.of(new DecoratedText(String.format("[%s]", i), JBColor.GREEN), new DecoratedText(": {...}")));
                         buildTree((JSONObject) array.get(i), arrayTempRoot);
                         tempRoot.add(arrayTempRoot);
                     } else {
@@ -188,6 +213,7 @@ public class JsonFormatter {
                 }
                 root.add(tempRoot);
             } else {
+                //处理字符串，在上一级节点最后拼上一个字符串节点
                 List<DecoratedText> arrayColorText = getStringTextList(String.format("\"%s\"", item), jsonObject.get(item));
                 if (!strings.get(strings.size() - 1).equals(item)) {
                     arrayColorText.add(new DecoratedText(","));
@@ -198,7 +224,9 @@ public class JsonFormatter {
         return root;
     }
 
-
+    /**
+     * 搞出来 "key":"value" 或者 "key":value
+     */
     private List<DecoratedText> getStringTextList(String key, Object value) {
         List<DecoratedText> arrayColorText = new ArrayList<>();
         if (value.getClass().getName().contains("String")) {
@@ -314,42 +342,35 @@ class DecoratedText {
 }
 
 class TextPaneDefaultTreeCellRenderer extends DefaultTreeCellRenderer {
-    TextPaneScrollPane textPaneScrollPane = new TextPaneScrollPane();
+    JsonTextScrollPane jsonTextScrollPane = new JsonTextScrollPane();
 
     public TextPaneDefaultTreeCellRenderer() {
-//        textPaneScrollPane.setBackgroundNonSelectionColor(getBackgroundNonSelectionColor());
-//        textPaneScrollPane.setBackgroundSelectionColor(getBackgroundSelectionColor());
-        textPaneScrollPane.setTextNonSelectionColor(getTextNonSelectionColor());
-        textPaneScrollPane.setTextSelectionColor(getTextSelectionColor());
-    }
-
-    @Override
-    public void updateUI() {
-        super.updateUI();
+        jsonTextScrollPane.setBackgroundNonSelectionColor(getBackgroundNonSelectionColor());
+        jsonTextScrollPane.setBackgroundSelectionColor(getBackgroundSelectionColor());
+        jsonTextScrollPane.setTextNonSelectionColor(getTextNonSelectionColor());
+        jsonTextScrollPane.setTextSelectionColor(getTextSelectionColor());
     }
 
     @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value,
                                                   boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-        setIcon(null);
-//        if (leaf) {
-        return textPaneScrollPane.getTreeCellRendererComponent(tree, value,
+
+        JTextPane jTextPane = (JTextPane) jsonTextScrollPane.getTreeCellRendererComponent(tree, value,
                 selected, expanded, leaf, row, hasFocus);
-//        } else {
-//            return super.getTreeCellRendererComponent(tree, value, selected,
-//                    expanded, leaf, row, hasFocus);
-//        }
+        int depth = ((DefaultMutableTreeNode) value).getLevel() - 1;
+        jTextPane.setBorder(BorderFactory.createEmptyBorder(0, 20 * depth, 0, 0));
+        return jTextPane;
     }
 }
 
-class TextPaneScrollPane extends JScrollPane implements TreeCellRenderer {
+class JsonTextScrollPane extends JScrollPane implements TreeCellRenderer {
     JTextPane textPane;
     Color backgroundNonSelectionColor;
     Color backgroundSelectionColor;
     Color textNonSelectionColor;
     Color textSelectionColor;
 
-    public TextPaneScrollPane() {
+    public JsonTextScrollPane() {
         textPane = new JTextPane();
         getViewport().add(textPane);
     }
@@ -394,7 +415,7 @@ class TextPaneScrollPane extends JScrollPane implements TreeCellRenderer {
             try {
                 doc.insertString(doc.getLength(), decText.getText(), getAttributeSet(decText));
             } catch (BadLocationException ex) {
-                Logger.getLogger(TextPaneScrollPane.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(JsonTextScrollPane.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else if (object instanceof List) {
             textPane.setText("");
@@ -404,13 +425,10 @@ class TextPaneScrollPane extends JScrollPane implements TreeCellRenderer {
                 try {
                     doc.insertString(doc.getLength(), decText.getText(), getAttributeSet(decText));
                 } catch (BadLocationException ex) {
-                    Logger.getLogger(TextPaneScrollPane.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(JsonTextScrollPane.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         } else {
-            //textPane = new JTextPane(); // Needed because take the last StyleConstants used!
-            //textPane.setText(""+object);
-            //return new JLabel(object.toString());
             return new DefaultTreeCellRenderer().getTreeCellRendererComponent(tree,
                     value, leaf, expanded, leaf, row, hasFocus);
         }
