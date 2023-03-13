@@ -27,7 +27,7 @@ class VisibleConfig : PersistentStateComponent<VisibleConfig?> {
 
     private fun init() {
         properties = HashMap()
-        val action = (ActionManager.getInstance().getAction("CreateClasses") as CreateClasses)
+        val action = (ActionManager.getInstance().getAction("intelli create") as CreateClasses)
         properties[action.getActionKey()] = true
     }
 

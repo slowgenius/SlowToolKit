@@ -1,5 +1,6 @@
 package com.slowgenius.toolkit.autoCreate
 
+import com.alibaba.fastjson.JSONObject
 import com.intellij.ide.actions.CreateFileFromTemplateDialog
 import com.intellij.ide.actions.CreateFileFromTemplateDialog.FileCreator
 import com.intellij.ide.fileTemplates.FileTemplate
@@ -12,8 +13,12 @@ import com.intellij.openapi.util.text.StringUtil
 import com.intellij.psi.JavaDirectoryService
 import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiElementFactory
 import com.intellij.util.PlatformIcons
 import com.slowgenius.toolkit.base.SlowAbstractAction
+import com.slowgenius.toolkit.utils.SlowPsiUtils
+import com.slowgenius.toolkit.utils.Utils
+import org.apache.commons.lang3.StringUtils
 import java.util.*
 import java.util.stream.Collectors
 
@@ -22,7 +27,7 @@ import java.util.stream.Collectors
  * @version SlowToolkit
  * @since 2022/6/29 20:50:08
  */
-class CreateClasses : SlowAbstractAction() {
+open class CreateClasses : SlowAbstractAction() {
     override fun actionPerformed(anActionEvent: AnActionEvent) {
         val project = anActionEvent.project!!
         val dataContext = anActionEvent.dataContext
@@ -46,7 +51,19 @@ class CreateClasses : SlowAbstractAction() {
                         JavaDirectoryService.getInstance().createClass(dir, className!!, templateName, true)
                     }.collect(Collectors.toList())
                 //返回第一个元素
-                return result[0]
+                val psiClass = result[0];
+                val systemClipboardText = Utils.getSystemClipboardText().trim()
+                if (!StringUtils.startsWith(systemClipboardText, "{")) {
+                    return psiClass
+                }
+                val parseObject = JSONObject.parseObject(systemClipboardText);
+                parseObject.keys.forEach { item: String ->
+                    val createPrimitiveType = PsiElementFactory.getInstance(project)
+                        .createType(SlowPsiUtils.getClassByName(project, "java.lang.String"))
+                    psiClass.add(PsiElementFactory.getInstance(project).createField(item, createPrimitiveType))
+                }
+                return psiClass
+
             }
 
             override fun startInWriteAction(): Boolean {

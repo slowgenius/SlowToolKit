@@ -168,15 +168,23 @@ public class JsonFormatter {
                 jsonTree.setModel(rootModel);
                 jsonTree.setRootVisible(false);
                 jsonTree.expandPath(new TreePath(dataRoot.getPath()));
-                jsonObject.values().forEach(item -> {
-                    System.out.println(1111);
-                });
             } else if (unFormatJson.startsWith("[")) {
                 unFormatJsonObject = JSONObject.parseArray(unFormatJson);
+
+                JSONArray jsonArray = (JSONArray) unFormatJsonObject;
+                DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(new DecoratedText("array"));
+                DefaultMutableTreeNode dataRoot = new DefaultMutableTreeNode(List.of(new DecoratedText("array", JBColor.GREEN), new DecoratedText(": [")));
+                rootNode.add(dataRoot);
+                buildTree(null, dataRoot);
+                TreeModel rootModel = new DefaultTreeModel(rootNode);
+                jsonTree.setModel(rootModel);
+                jsonTree.setRootVisible(false);
+                jsonTree.expandPath(new TreePath(dataRoot.getPath()));
             } else {
                 unFormatJsonObject = "json格式有误";
             }
         }
+
         String resultJson = JSON.toJSONString(unFormatJsonObject, SerializerFeature.PrettyFormat).replace("\t", "    ");
         result.setText(resultJson);
     }
