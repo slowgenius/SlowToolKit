@@ -118,10 +118,6 @@ public class Translator {
         if (translator.getError_code() != null && !translator.getError_code().equals("52000")) {
             return translator.getError_msg();
         }
-        String str = "";
-        for (ResultData allWord : translator.getTrans_result()) {
-            str = str + " [" + allWord.getDst() + "] ";
-        }
-        return str;
+        return translator.getTrans_result().get(0).getDst();
     }
 }
