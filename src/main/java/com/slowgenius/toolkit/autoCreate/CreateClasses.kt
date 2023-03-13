@@ -7,6 +7,7 @@ import com.intellij.ide.fileTemplates.FileTemplate
 import com.intellij.ide.fileTemplates.FileTemplateManager
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.LangDataKeys
+import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.InputValidatorEx
 import com.intellij.openapi.util.text.StringUtil
@@ -14,6 +15,7 @@ import com.intellij.psi.JavaDirectoryService
 import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementFactory
+import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.util.PlatformIcons
 import com.slowgenius.toolkit.base.SlowAbstractAction
 import com.slowgenius.toolkit.utils.SlowPsiUtils
@@ -57,10 +59,16 @@ open class CreateClasses : SlowAbstractAction() {
                     return psiClass
                 }
                 val parseObject = JSONObject.parseObject(systemClipboardText);
-                parseObject.keys.forEach { item: String ->
-                    val createPrimitiveType = PsiElementFactory.getInstance(project)
-                        .createType(SlowPsiUtils.getClassByName(project, "java.lang.String"))
-                    psiClass.add(PsiElementFactory.getInstance(project).createField(item, createPrimitiveType))
+                WriteCommandAction.writeCommandAction(project).run<RuntimeException> {
+                    parseObject.keys.forEach { item: String ->
+                        val createPrimitiveType = PsiElementFactory.getInstance(project)
+                            .createType(SlowPsiUtils.getClassByName(project, "java.lang.String"))
+                        val field = PsiElementFactory.getInstance(project).createField(item, createPrimitiveType)
+                        val comment = PsiElementFactory.getInstance(project).createDocCommentFromText("\n/**\n * \n */")
+                        field.modifierList?.addBefore(comment, field.modifierList?.firstChild)
+                        psiClass.add(field)
+                        CodeStyleManager.getInstance(project).reformat(psiClass)
+                    }
                 }
                 return psiClass
 
