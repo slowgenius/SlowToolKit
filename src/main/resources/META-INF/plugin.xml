@@ -116,10 +116,6 @@
             <add-to-group group-id="GenerateGroup" anchor="last"/>
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift K"/>
         </action>
-        <action id="gen-api-doc-json" class="com.slowgenius.toolkit.gen.apidocjson.GenApiDocJsonAction"
-                text="Gen Api Doc Json" description="Generate doc util">
-            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-        </action>
 
         <action id="convert-java-to-json" class="com.slowgenius.toolkit.converttojson.ConvertToJsonAction"
                 text="Convert to Json" description="Convert java to json">
