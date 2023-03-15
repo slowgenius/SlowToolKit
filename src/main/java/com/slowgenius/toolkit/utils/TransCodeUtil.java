@@ -34,6 +34,9 @@ public class TransCodeUtil {
         return md5(str, "");
     }
 
+    /**
+     * md5 32位大写
+     */
     public static String md5UpperCase(String str) {
         return md5(str).toUpperCase();
     }
