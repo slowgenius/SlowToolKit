@@ -6,6 +6,8 @@ import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.slowgenius.toolkit.autoCreate.CreateClasses
+import java.util.*
+import kotlin.collections.HashMap
 
 /**
  * 插件是否可见配置
@@ -27,7 +29,7 @@ class VisibleConfig : PersistentStateComponent<VisibleConfig?> {
 
     private fun init() {
         properties = HashMap()
-        val action = (ActionManager.getInstance().getAction("intelli create") as CreateClasses)
+        val action = (Optional.ofNullable(ActionManager.getInstance()).map { item-> item.getAction("intelli create") }.orElse(null) as CreateClasses)
         properties[action.getActionKey()] = true
     }
 
