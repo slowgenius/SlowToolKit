@@ -34,6 +34,8 @@
 
     <change-notes>
         <![CDATA[
+      <h3>3.2.0</h3>
+      <p> 1.create class by json-schema </p>
       <h3>3.1.0</h3>
       <p> 1.When using intelli create, if there is json in the clipboard, the attribute will be automatically generated </p>
       <p> 2.Optimize the display of translator </p>
